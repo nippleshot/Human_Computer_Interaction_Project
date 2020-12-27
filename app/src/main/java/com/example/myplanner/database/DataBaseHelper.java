@@ -17,7 +17,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String	taskRealCompleteTime
         String	taskPlace
         String	taskMemo
-        boolean 	isCompleted			//该任务是不是完成？
+        boolean isCompleted			//该任务是不是完成？
         boolean	isCompletedInTime 	//该任务是不是在制定的时间内完成？
      }
      **/

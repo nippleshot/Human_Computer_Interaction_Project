@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/linear_layout"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="59dp"
+                android:layout_height="wrap_content"
+                android:text="完成"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:id="@+id/taskCompleted"
+                android:layout_centerVertical="true"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskTitle"
+                android:text="Task Name"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:layout_toRightOf="@+id/taskCompleted"
+                android:layout_marginLeft="15dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskTimeLeft"
+                android:text="5 min left"
+                android:textSize="17sp"
+                android:textColor="#a9a9a9"
+                android:layout_toRightOf="@+id/taskCompleted"
+                android:layout_below="@id/taskTitle"
+                android:layout_marginLeft="15dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskDelete_icon"
+                android:src="@drawable/ic_baseline_cancel_20"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/expandable_layout">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_place_24"
+                android:id="@+id/taskPlaceIcon"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskPlace"
+                android:text="Nanjing University Gulou Campus"
+                android:textSize="17sp"
+                android:textColor="@color/colorPrimaryLightDark"
+                android:maxLines="1"
+                android:layout_toRightOf="@+id/taskPlaceIcon"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:padding="16dp"
+                />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_info_24"
+                android:id="@+id/taskInfoIcon"
+                android:layout_below="@id/taskPlaceIcon"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskMemo"
+                android:text="Call Tom before arrive, I couldn't find out more about them because I didn't know the name of the View exactly"
+                android:textSize="17sp"
+                android:maxLines="15"
+                android:textColor="@color/colorPrimaryLightDark"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/taskInfoIcon"
+                android:layout_below="@+id/taskPlace"
+                android:padding="16dp"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskFixButton"
+                android:layout_below="@+id/taskMemo"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="修改"
+                android:textStyle="bold"
+                app:backgroundTint="@color/colorAccent"
+                />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

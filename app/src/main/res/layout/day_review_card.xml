@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:id="@+id/dayTaskCardView"
+    app:cardCornerRadius="20dp"
+    app:strokeWidth="1dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dayTaskOuterLinear_layout"
+        >
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="2dp"
+            >
+
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:id="@+id/dayTaskInnerLinear_layout"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:padding="16dp">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dayTaskDateYear"
+                        android:text="2020年"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textAllCaps="true"
+                        android:layout_alignParentLeft="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dayTaskDateMonth"
+                        android:text="12月23日"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="30sp"
+                        android:textAllCaps="true"
+                        android:layout_below="@+id/dayTaskDateYear"
+                        android:layout_alignParentLeft="true"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/totalDayTask"
+                        android:text="总数 13"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/dayTaskDateMonth"
+                        android:padding="16dp"
+                        android:layout_centerHorizontal="true"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/totalDayTaskEfficiency"
+                        android:text="  - 39分钟"
+                        android:textSize="18sp"
+                        android:drawableLeft="@drawable/ic_baseline_trending_up_32_yellow"
+                        android:textColor="@color/colorAccentVelvet"
+                        android:textStyle="bold"
+                        android:layout_below="@+id/totalDayTask"
+                        android:layout_centerHorizontal="true"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/totalDayTaskNotComplete"
+                        android:text="未完成 10"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorAccentRed"
+                        android:layout_below="@+id/totalDayTaskEfficiency"
+                        android:padding="16dp"
+                        android:layout_centerHorizontal="true"
+
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
