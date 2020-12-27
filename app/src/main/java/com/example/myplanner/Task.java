@@ -30,6 +30,21 @@ public class Task {
         this.isCompletedInTime = false;
     }
 
+    public Task(int taskId, String taskName, String taskStartDate, String taskStartTime, String taskCompleteDate, String taskCompleteTime, String taskRealCompleteDate, String taskRealCompleteTime, String taskPlace, String taskMemo, boolean isCompleted, boolean isCompletedInTime) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskStartDate = taskStartDate;
+        this.taskStartTime = taskStartTime;
+        this.taskCompleteDate = taskCompleteDate;
+        this.taskCompleteTime = taskCompleteTime;
+        this.taskRealCompleteDate = taskRealCompleteDate;
+        this.taskRealCompleteTime = taskRealCompleteTime;
+        this.taskPlace = taskPlace;
+        this.taskMemo = taskMemo;
+        this.isCompleted = isCompleted;
+        this.isCompletedInTime = isCompletedInTime;
+    }
+
     public int getTaskId() {
         return taskId;
     }
