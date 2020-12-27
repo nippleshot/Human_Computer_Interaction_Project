@@ -9,8 +9,11 @@ import com.example.myplanner.Task;
 
 import java.util.ArrayList;
 /**
- * use getDataBase(this) to get the single database
- * use createTask(Task task) to add task in the database
+ * call getDataBase(this) to get the single database
+ * call createTask(Task task) to add task in the database and return task id
+ * call retrieve() to get the list of tasks
+ * call deleteTask(Task task) to delete the task
+ * call updateTask(Task task) to update the task
 **/
 public class DataBase {
     private final int VERSION = 0;
@@ -163,7 +166,7 @@ public class DataBase {
         int repeat = cursor.getInt(cursor.getColumnIndex("repeat"));
         boolean Bdone = (done==1);
         boolean Brepeat = (repeat==1);
-        return new Task(id,taskName,hourstr+":" + minstr,imageId,Bdone,Brepeat);
+        return new Task(id, taskName);
     }
 
     /**
@@ -187,7 +190,7 @@ public class DataBase {
      * @return found task
      */
     private Task findTaskById(int id){
-        Task res = new Task("","");
+        Task res = new Task("");
         Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME,null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
@@ -205,50 +208,44 @@ public class DataBase {
     /**
      * modify task in database
      *
-     * @return new sorted Arraylist which includes all task
      */
-    public ArrayList update(Task taskUp){
+    public void updateTask(Task taskUp){
 
         //modify difference
         ContentValues contentValues = new ContentValues();
         contentValues.put("task_name",taskUp.getTaskName());
-        String taskTime = taskUp.getTaskTime();
-        int hour;
-        int min;
-        try{
-            hour = Integer.parseInt(taskTime.substring(0,taskTime.indexOf(":")));
-            min = Integer.parseInt(taskTime.substring(taskTime.indexOf(":") + 1));
-        }catch(Exception e){
-            hour = 0;
-            min = 0;
-        }
-        contentValues.put("hour",hour);
-        contentValues.put("min",min);
-        contentValues.put("image_id",taskUp.getImageId());
-        contentValues.put("done",taskUp.isDone());
-        contentValues.put("repeat",taskUp.isRepeat());
+        //String taskTime = taskUp.getTaskTime();
+//        int hour;
+//        int min;
+//        try{
+//            hour = Integer.parseInt(taskTime.substring(0,taskTime.indexOf(":")));
+//            min = Integer.parseInt(taskTime.substring(taskTime.indexOf(":") + 1));
+//        }catch(Exception e){
+//            hour = 0;
+//            min = 0;
+//        }
+//        contentValues.put("hour",hour);
 
         //upgrade
-        if(contentValues.size()==0){
-            return taskArrayList;
+        if(contentValues.size() == 0){
+            //return taskArrayList;
         }
         taskTables.update(DataBaseHelper.TABLE_NAME,contentValues,
                 "id=?",new String[]{String.valueOf(taskUp.getTaskId())});
         updateArrayList("up",taskUp);
 
-        return taskArrayList;
+        //return taskArrayList;
     }
 
     /**
      *delete task in database
      * @param taskDel the task needed to be deleted
-     * @return new sorted Arraylist which includes all task
      */
-    public ArrayList delete(Task taskDel){
+    public void deleteTask(Task taskDel){
         taskTables.delete(DataBaseHelper.TABLE_NAME,
                 "id = ?",new String[]{String.valueOf(taskDel.getTaskId())});
         updateArrayList("del",taskDel);
-        return taskArrayList;
+        //return taskArrayList;
     }
 
 
@@ -280,33 +277,33 @@ public class DataBase {
             return arrayList;
         }
         Task task = arrayList.get(arrayList.size()-1);
-        int taskHour = Integer.parseInt(task.getTaskTime().substring(0,2));
-        int taskMin = Integer.parseInt(task.getTaskTime().substring(3));
-        int i = 0;
-        Task lastTask = arrayList.get(i);
-        int lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
-        int lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
+//        int taskHour = Integer.parseInt(task.getTaskTime().substring(0,2));
+//        int taskMin = Integer.parseInt(task.getTaskTime().substring(3));
+//        int i = 0;
+//        Task lastTask = arrayList.get(i);
+//        int lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
+//        int lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
 
-        for(i = 0;i < arrayList.size();i++){
-            if(taskHour<lastHour){
-                break;
-            }else if(taskHour==lastHour){
-                if(taskMin<lastMin){
-                    break;
-                }else if(taskMin==lastMin){
-                    break;
-                }
-            }
-            lastTask = arrayList.get(i);
-            lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
-            lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
-        }
-
-        if(i > 0){
-            arrayList.add(i-1,task);
-        }else{
-            arrayList.add(0,task);
-        }
+//        for(i = 0;i < arrayList.size();i++){
+//            if(taskHour<lastHour){
+//                break;
+//            }else if(taskHour==lastHour){
+//                if(taskMin<lastMin){
+//                    break;
+//                }else if(taskMin==lastMin){
+//                    break;
+//                }
+//            }
+//            lastTask = arrayList.get(i);
+//            lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
+//            lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
+//        }
+//
+//        if(i > 0){
+//            arrayList.add(i-1,task);
+//        }else{
+//            arrayList.add(0,task);
+//        }
 
         arrayList.remove(arrayList.size()-1);
         return arrayList;
@@ -360,9 +357,9 @@ public class DataBase {
         ArrayList<Task> arrayList = retrieve();
         String str = "";
         for (int i = 0;i < arrayList.size();i++){
-            if(arrayList.get(i).isRepeat()){
-                str = str + arrayList.get(i).getTaskId() + ";";
-            }
+//            if(arrayList.get(i).isRepeat()){
+//                str = str + arrayList.get(i).getTaskId() + ";";
+//            }
         }
         str = str.substring(1,str.length()-1);
         contentValues.put("date",date);
