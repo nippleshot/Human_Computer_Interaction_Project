@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FixTaskActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RelativeLayout
+                android:layout_height="700dp"
+                android:layout_width="match_parent"
+                android:padding="16dp">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintAnimationEnabled="true"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="20"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_baseline_title_20"
+                        android:drawablePadding="9dp"
+                        android:hint="任务名称"
+                        android:inputType="text"
+                        android:maxLength="20" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskStartDate"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fix_text_input_taskName"
+                    android:layout_marginTop="15dp"
+                    android:descendantFocusability="blocksDescendants"
+                    app:hintAnimationEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_calendar_today_24"
+                        android:drawablePadding="9dp"
+                        android:hint="开始日期"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskStartTime"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fix_text_input_taskName"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_toRightOf="@id/fix_text_input_taskStartDate"
+                    android:layout_alignParentRight="true"
+                    android:descendantFocusability="blocksDescendants"
+                    app:hintAnimationEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_access_time_24"
+                        android:drawablePadding="9dp"
+                        android:hint="开始时间"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskCompleteDate"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fix_text_input_taskStartDate"
+                    android:layout_marginTop="10dp"
+                    android:descendantFocusability="blocksDescendants"
+                    app:hintAnimationEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_calendar_today_24"
+                        android:drawablePadding="9dp"
+                        android:hint="完成日期"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskCompleteTime"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fix_text_input_taskStartTime"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@id/fix_text_input_taskCompleteDate"
+                    android:layout_alignParentRight="true"
+                    android:descendantFocusability="blocksDescendants"
+                    app:hintAnimationEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_baseline_access_time_24"
+                        android:drawablePadding="9dp"
+                        android:hint="完成时间"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fix_text_input_taskPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/fix_text_input_taskCompleteDate"
+                    android:layout_marginTop="30dp"
+                    app:hintAnimationEnabled="true"
+                    app:errorEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_baseline_place_24"
+                        android:drawablePadding="9dp"
+                        android:hint="地点"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/fix_text_input_taskMemo"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:layout_below="@+id/fix_text_input_taskPlace"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_design"
+                    android:hint="   Memo"
+                    app:counterEnabled="true">
+
+                </EditText>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/updateNewTask"
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/fix_text_input_taskMemo"
+                    android:text="修改任务"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"
+                    app:backgroundTint="@color/colorAccent"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:menu="@menu/app_bar_menu"
+        app:hideOnScroll="true"
+        app:fabCradleMargin="13dp"
+        app:fabCradleRoundedCornerRadius="20dp"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

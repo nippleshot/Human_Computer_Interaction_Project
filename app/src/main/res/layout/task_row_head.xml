@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/completedLinear_layout"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskDate"
+                android:text="2020年12月23日"
+                android:textSize="30sp"
+                android:textAllCaps="true"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskTotal"
+                android:text="总数  13"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:layout_below="@+id/taskDate"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskCompletedNum"
+                android:text="完成  3"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:layout_below="@+id/taskTotal"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="28dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskCompletedInTimeNum"
+                android:text="(时间内完成  2)"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_below="@+id/taskTotal"
+                android:layout_toRightOf="@+id/taskCompletedNum"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskNotCompletedNum"
+                android:text="未完  10"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorAccentRed"
+                android:layout_below="@+id/taskCompletedNum"
+                android:layout_marginLeft="28dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/efficiencyLabel"
+                android:text="总效率"
+                android:textSize="20sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                android:layout_below="@+id/taskNotCompletedNum"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/totalTaskEfficiency"
+                android:text="+ 39分钟"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/taskNotCompletedNum"
+                android:layout_marginTop="22dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/efficiencyLabel"
+                />
+
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:id="@+id/taskPieChart"
+                android:layout_below="@+id/taskDate"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                >
+
+            </com.github.mikephil.charting.charts.PieChart>
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_expand_more_24"
+                android:id="@+id/expandable_icon"
+                android:layout_below="@+id/taskPieChart"
+                android:layout_marginTop="15dp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/expandable_completedTask_layout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/completedRecyclerView"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_keyboard_arrow_up_24"
+                android:id="@+id/fold_expandable_icon"
+                android:layout_below="@+id/completedRecyclerView"
+                android:layout_marginTop="15dp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
+</com.google.android.material.card.MaterialCardView>
