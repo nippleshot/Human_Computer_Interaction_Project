@@ -16,7 +16,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myplanner.FixTaskActivity;
 import com.example.myplanner.R;
+import com.example.myplanner.Task;
+import com.example.myplanner.dataHelper.Converter;
+import com.example.myplanner.dataHolder.CompletedTasksData;
+import com.example.myplanner.dataHolder.RecycleViewData;
+import com.example.myplanner.dataHolder.UncompletedTasksData;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -34,13 +40,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TASK_VIEW_HOLDER = 2;
 
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-    private List<DataItem> dataItems;
+    private ArrayList<RecycleViewData> dataItems;
     private Context context;
     private OnItemClickListener mListener;
-    CompletedTaskAdaptor completedTaskAdaptor;
+    public CompletedTaskAdapter completedTaskAdapter;
 
-    public TaskListAdapter(List<DataItem> dataItems, Context context) {
-        this.dataItems = dataItems;
+    public TaskListAdapter(ArrayList<Task> tasks, Context context) {
+        this.dataItems = Converter.toRecycleViewDataList( tasks );
         this.context = context;
     }
 
@@ -133,14 +139,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     false
             );
             layoutManager.setInitialPrefetchItemCount(head.getCompletedTasks().size());
-            completedTaskAdaptor = new CompletedTaskAdaptor(head.getCompletedTasks(), context);
+            completedTaskAdapter = new CompletedTaskAdapter(head.getCompletedTasks(), context);
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
             dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.completed_recycleview_divider));
 
             ((HeadViewHolder) holder).completedRecyclerView.setLayoutManager(layoutManager);
             ((HeadViewHolder) holder).completedRecyclerView.addItemDecoration(dividerItemDecoration);
-            ((HeadViewHolder) holder).completedRecyclerView.setAdapter(completedTaskAdaptor);
+            ((HeadViewHolder) holder).completedRecyclerView.setAdapter(completedTaskAdapter);
             ((HeadViewHolder) holder).completedRecyclerView.setRecycledViewPool(viewPool);
 
             boolean isExpandable = head.isExpandable();
@@ -162,35 +168,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return dataItems.get(position).getViewType();
     }
 
-    private int countTotalEfficiency(List<TempCompletedTask> CompletedTasks){
-        int total = 0;
-        for(int i=0; i<CompletedTasks.size(); i++){
-            total = total + CompletedTasks.get(i).getSubtractTime_min();
-        }
 
-        return total;
-    }
 
-    private String printSubtractedMin(int subtractedMin){
 
-        if(subtractedMin<0){
-            subtractedMin = -1 * subtractedMin;
-        }
-
-        if(subtractedMin>=60){
-            int hour = subtractedMin/60;
-            int min = subtractedMin - (60*hour);
-
-            if(min==0){
-                return " " + hour + "小时";
-            }else{
-                return " " + hour + "小时" + min + "分钟";
-            }
-
-        }else{
-            return " " + subtractedMin + "分钟";
-        }
-    }
 
     private void setPieChart(PieChart pieChart, int completedInTime, int completedOverTime){
         pieChart.setUsePercentValues(true);
@@ -252,7 +232,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             completedLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TempHead tempHead = dataItems.get(getAdapterPosition()).getHeadInfo();
+                    CompletedTasksData tempHead = dataItems.get(getAdapterPosition()).getAnalysisViewData();
                     tempHead.setExpandable(!tempHead.isExpandable());
                     notifyItemChanged(getAdapterPosition());
                 }
@@ -288,7 +268,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    TempTask tempTask = dataItems.get(getAdapterPosition()).getTaskInfo();
+                    UncompletedTasksData tempTask = dataItems.get(getAdapterPosition()).getCheckListViewData();
                     tempTask.setExpandable(!tempTask.isExpandable());
                     notifyItemChanged(getAdapterPosition());
                 }
@@ -307,7 +287,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onDeleteClick(position);
+
+                            RecycleViewData recycleViewData = dataItems.get(position);
+                            UncompletedTasksData to_RemoveTask = recycleViewData.getCheckListViewData();
+                            listener.onDeleteClick(to_RemoveTask.getTask_db_index());
+
                         }
                     }
                 }
@@ -320,7 +304,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
 
-                            listener.onInsertClick(position);
+                            RecycleViewData recycleViewData = dataItems.get(position);
+                            UncompletedTasksData to_CompleteTask = recycleViewData.getCheckListViewData();
+                            listener.onInsertClick(to_CompleteTask.getTask_db_index());
+
                         }
                     }
                 }
@@ -332,6 +319,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void openFixTaskActivity(){
         Intent intent = new Intent(context, FixTaskActivity.class);
+
+        /**
+         * extras 추가해야됨!
+         */
         context.startActivity(intent);
     }
 

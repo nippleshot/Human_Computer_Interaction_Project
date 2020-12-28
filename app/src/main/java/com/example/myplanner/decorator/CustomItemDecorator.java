@@ -13,7 +13,7 @@ public class CustomItemDecorator extends RecyclerView.ItemDecoration {
 
     int halfSpace;
 
-    CustomItemDecorator(int spanPadding){
+    public CustomItemDecorator(int spanPadding){
         halfSpace = spanPadding/2;
     }
 

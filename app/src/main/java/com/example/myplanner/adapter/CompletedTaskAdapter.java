@@ -13,12 +13,12 @@ import com.example.myplanner.R;
 
 import java.util.List;
 
-public class CompletedTaskAdaptor extends RecyclerView.Adapter<CompletedTaskAdaptor.CompletedViewHolder> {
+public class CompletedTaskAdapter extends RecyclerView.Adapter<CompletedTaskAdapter.CompletedViewHolder> {
 
     private List<TempCompletedTask> completedTasks;
     Context context;
 
-    public CompletedTaskAdaptor(List<TempCompletedTask> completedTasks, Context context) {
+    public CompletedTaskAdapter(List<TempCompletedTask> completedTasks, Context context) {
         this.completedTasks = completedTasks;
         this.context = context;
     }

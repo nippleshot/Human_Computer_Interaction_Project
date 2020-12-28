@@ -2,6 +2,10 @@ package com.example.myplanner.dataHelper;
 
 import com.example.myplanner.Task;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MessageHelper {
 
     /**
@@ -51,6 +55,7 @@ public class MessageHelper {
     }
 
 
+
     /**
      *
      * @param task
@@ -59,30 +64,51 @@ public class MessageHelper {
     public static String makeCompletedTaskMsg(Task task){
         if(task.isCompleted()){
             int gapMin = TaskHelper.countGapInMin(task);
-
-            // return < 0 min : postponed finishing task
-            // return > 0 min : task finished earlier
-            if(gapMin < 0){
-
-            }else{
-
-            }
-
+            return makeCompletedTaskMsg(gapMin);
         }else{
             return "MessageHelper.makeCompletedTaskMsg() Error : this task is uncompleted task";
         }
-        return null;
     }
+
+    public static String makeCompletedTaskMsg(int gapMin){
+        if(gapMin < 0){
+            return "迟到" + changeToHour_Min(gapMin, false);
+        }else{
+            return "提前" + changeToHour_Min(gapMin, false);
+        }
+    }
+
+
 
     /**
      *
      * @param task
-     * @return "开始前(xx小时)xx分钟"
+     * @return "开始前(xx小时)xx分钟" or "开始时间过了(xx小时)xx分钟"
      */
     public static String makeUncompletedTaskMsg(Task task){
+        if(!task.isCompleted()){
+            String taskStartDateTime = task.getTaskStartDate() + task.getTaskCompleteTime();
+            return makeUncompletedTaskMsg(taskStartDateTime);
+        }else{
+            return "MessageHelper.makeUncompletedTaskMsg() Error : this task is completed task";
+        }
+    }
 
+    public static String makeUncompletedTaskMsg(String dateTime){
+        Date current = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/ddHH:mm");
+        String currentDateTime = dateFormat.format(current);
 
-        return null;
+        // 임무시작시간 - 현재시간
+        // 9시30분 - 9시20분
+        // == 시작시간까지 10분 남음
+        int gapMin = TaskHelper.subtractDateTime(dateTime, currentDateTime);
+        if(gapMin > 0){
+            return "开始前" + changeToHour_Min(gapMin, false);
+        }else{
+            return "开始时间过了" + changeToHour_Min(gapMin, false);
+        }
+
     }
 
 

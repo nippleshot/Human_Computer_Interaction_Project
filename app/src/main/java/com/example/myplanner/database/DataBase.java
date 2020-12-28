@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myplanner.Task;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 /**
  * call getDataBase(this) to get the single database
@@ -34,6 +35,7 @@ public class DataBase {
 
     private ArrayList<Task> historyTaskArrayList;
 
+
     /**construct database
      * @param context
      **/
@@ -60,7 +62,7 @@ public class DataBase {
         }
         return dataBase;
     }
-
+    
     /**
      * provide level
      * @return current level
