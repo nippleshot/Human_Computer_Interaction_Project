@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Time格式是HH:mm
  */
 public class DataBase {
-    private final int VERSION = 1;
+    private final int VERSION = 2;
 
     private DataBaseHelper dbHelper; //helper
 
@@ -206,7 +206,7 @@ public class DataBase {
     }
 
     public ArrayList getAllDate(){
-        Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME,new String[]{"task_start_date"},null,null,null,null,null);
+        Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME, new String[]{"task_start_date"},null,null,null,null,null);
         ArrayList<String> res = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
