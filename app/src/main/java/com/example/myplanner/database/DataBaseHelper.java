@@ -21,7 +21,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         boolean	isCompletedInTime 	//该任务是不是在制定的时间内完成？
      }
      **/
-    public static final String CREATE_TASK = "create table TaskTable"
+    public static final String CREATE_TASK = "create table task_table "
             + "("
             + "id INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + "task_name varchar(255) DEFAULT NULL,"
@@ -55,9 +55,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (newVersion){
             case 1:
-
+                db.execSQL(CREATE_TASK);
             case 2:
-                // db.execSQL(CREATE_LEVEL);
             case 3:
                 break;
         }
