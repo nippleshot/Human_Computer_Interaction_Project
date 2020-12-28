@@ -34,6 +34,7 @@ public class MainStaggeredActivity extends AppCompatActivity {
 
         dataBase = DataBase.getDataBase(this);
         recyclerView = findViewById(R.id.dayTaskRecyclerView);
+        dataItems = new ArrayList<>();
         initData();
         setCardAdapter();
 
