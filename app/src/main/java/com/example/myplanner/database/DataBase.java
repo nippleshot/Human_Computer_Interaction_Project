@@ -62,7 +62,7 @@ public class DataBase {
         }
         return dataBase;
     }
-    
+
     /**
      * provide level
      * @return current level
