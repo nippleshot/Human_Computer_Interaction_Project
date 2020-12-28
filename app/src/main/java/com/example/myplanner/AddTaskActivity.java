@@ -12,15 +12,17 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.myplanner.database.DataBase;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity {
     TextInputLayout taskName_inputLayout, taskStartDate_inputLayout, taskStartTime_inputLayout, taskCompleteDate_inputLayout, taskCompleteTime_inputLayout,taskPlace_inputLayout;
-    EditText taskMemo_inputLayout;
+    TextInputEditText taskMemo_inputLayout;
     TimePickerDialog s_timePickerDialog, c_timePickerDialog;
     DatePickerDialog s_datePickerDialog, c_datePickerDialog;
     MaterialButton button;
@@ -31,6 +33,8 @@ public class AddTaskActivity extends AppCompatActivity {
     int currentDay;
     int currentHour;
     int currentMinute;
+
+    DataBase dataBase;
 
 
 
@@ -47,12 +51,26 @@ public class AddTaskActivity extends AppCompatActivity {
         taskPlace_inputLayout = findViewById(R.id.text_input_taskPlace);
         taskMemo_inputLayout = findViewById(R.id.text_input_taskMemo);
 
+        dataBase = DataBase.getDataBase(this);
 
         button = findViewById(R.id.addNewTask);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Task newTask = new Task(
+                        taskName_inputLayout.getEditText().getText().toString(),
+                        taskStartDate_inputLayout.getEditText().getText().toString(),
+                        taskStartTime_inputLayout.getEditText().getText().toString(),
+                        taskCompleteDate_inputLayout.getEditText().getText().toString(),
+                        taskCompleteTime_inputLayout.getEditText().getText().toString(),
+                        taskPlace_inputLayout.getEditText().getText().toString(),
+                        taskMemo_inputLayout.getText().toString()
+                );
+
+                dataBase.createTask( newTask );
+
                 closeKeyboard();
             }
         });

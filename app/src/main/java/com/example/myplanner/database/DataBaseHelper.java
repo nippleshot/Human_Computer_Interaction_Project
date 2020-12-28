@@ -23,7 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      **/
     public static final String CREATE_TASK = "create table TaskTable"
             + "("
-            + "id int(11) PRIMARY KEY AUTOINCREMENT NOT NULL ,"
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + "task_name varchar(255) DEFAULT NULL,"
             + "task_start_date varchar(255) DEFAULT NULL,"
             + "task_start_time varchar(255) DEFAULT NULL,"

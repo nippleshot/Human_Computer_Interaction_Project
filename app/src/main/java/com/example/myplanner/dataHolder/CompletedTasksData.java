@@ -1,5 +1,8 @@
 package com.example.myplanner.dataHolder;
 
+import com.example.myplanner.dataHelper.TaskHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompletedTasksData {
@@ -7,10 +10,10 @@ public class CompletedTasksData {
     private boolean expandable;
 
     private String task_Date;
-    private int task_Total,  task_CompletedNum, task_CompletedInTimeNum, task_UncompletedNum;
-    private List<CompletedRecycleViewData> completedRecycleViewDataList;
+    private int task_Total,  task_CompletedNum, task_CompletedInTimeNum, task_UncompletedNum, task_TotalEfficiency;
+    private ArrayList<CompletedRecycleViewData> completedRecycleViewDataList;
 
-    public CompletedTasksData(String task_Date, int task_Total, int task_CompletedNum, int task_CompletedInTimeNum, int task_UncompletedNum, List<CompletedRecycleViewData> completedRecycleViewDataList) {
+    public CompletedTasksData(String task_Date, int task_Total, int task_CompletedNum, int task_CompletedInTimeNum, int task_UncompletedNum, ArrayList<CompletedRecycleViewData> completedRecycleViewDataList) {
         this.expandable = false;
         this.task_Date = task_Date;
         this.task_Total = task_Total;
@@ -18,6 +21,7 @@ public class CompletedTasksData {
         this.task_CompletedInTimeNum = task_CompletedInTimeNum;
         this.task_UncompletedNum = task_UncompletedNum;
         this.completedRecycleViewDataList = completedRecycleViewDataList;
+        this.task_TotalEfficiency = TaskHelper.countEfficiency(completedRecycleViewDataList);
     }
 
     public boolean isExpandable() {
@@ -68,11 +72,19 @@ public class CompletedTasksData {
         this.task_UncompletedNum = task_UncompletedNum;
     }
 
-    public List<CompletedRecycleViewData> getCompletedRecycleViewDataList() {
+    public ArrayList<CompletedRecycleViewData> getCompletedRecycleViewDataList() {
         return completedRecycleViewDataList;
     }
 
-    public void setCompletedRecycleViewDataList(List<CompletedRecycleViewData> completedRecycleViewDataList) {
+    public void setCompletedRecycleViewDataList(ArrayList<CompletedRecycleViewData> completedRecycleViewDataList) {
         this.completedRecycleViewDataList = completedRecycleViewDataList;
+    }
+
+    public int getTask_TotalEfficiency() {
+        return task_TotalEfficiency;
+    }
+
+    public void setTask_TotalEfficiency(int task_TotalEfficiency) {
+        this.task_TotalEfficiency = task_TotalEfficiency;
     }
 }

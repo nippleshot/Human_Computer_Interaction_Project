@@ -1,15 +1,19 @@
 package com.example.myplanner.dataHolder;
 
+import com.example.myplanner.dataHelper.MessageHelper;
+
 public class CompletedRecycleViewData {
 
     private String task_Name;
     private String task_Start_Completed;
     private String task_TimeGap_Msg;
+    private int timeGap;
 
-    public CompletedRecycleViewData(String task_Name, String task_StartTime, String task_RealCompletedTime, String task_TimeGap_Msg) {
+    public CompletedRecycleViewData(String task_Name, String task_StartTime, String task_RealCompletedTime, int timeGap) {
         this.task_Name = task_Name;
         this.task_Start_Completed = task_StartTime + " - " + task_RealCompletedTime;
-        this.task_TimeGap_Msg = task_TimeGap_Msg;
+        this.task_TimeGap_Msg = MessageHelper.makeCompletedTaskMsg(timeGap);
+        this.timeGap = timeGap;
     }
 
 
@@ -35,5 +39,14 @@ public class CompletedRecycleViewData {
 
     public void setTask_TimeGap_Msg(String task_TimeGap_Msg) {
         this.task_TimeGap_Msg = task_TimeGap_Msg;
+    }
+
+
+    public int getTimeGap() {
+        return timeGap;
+    }
+
+    public void setTimeGap(int timeGap) {
+        this.timeGap = timeGap;
     }
 }

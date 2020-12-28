@@ -24,11 +24,9 @@ public class Converter {
         ArrayList<CompletedRecycleViewData> result = new ArrayList<>();
 
         Task task;
-        String taskMsg;
         for(int i=0; i<day_Date_CompletedTasks.size(); i++){
             task = day_Date_CompletedTasks.get(i);
-            taskMsg = MessageHelper.makeCompletedTaskMsg(task);
-            result.add( new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), taskMsg) );
+            result.add( new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task)) );
         }
 
         return result;

@@ -1,6 +1,7 @@
 package com.example.myplanner.dataHelper;
 
 import com.example.myplanner.Task;
+import com.example.myplanner.dataHolder.CompletedRecycleViewData;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -77,6 +78,21 @@ public class TaskHelper {
         }
 
         return min_Sum;
+    }
+
+    public static int countEfficiency(ArrayList<CompletedRecycleViewData> tasks){
+        int min_Sum = 0;
+        int taskGap;
+        for(int i=0; i<tasks.size(); i++){
+            taskGap = tasks.get(i).getTimeGap();
+            if(taskGap == Integer.MAX_VALUE){
+                return Integer.MAX_VALUE;
+            }
+            min_Sum = min_Sum + taskGap;
+        }
+
+        return min_Sum;
+
     }
 
     public static int countCompletedTask(ArrayList<Task> tasks){

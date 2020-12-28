@@ -26,18 +26,16 @@ public class FixTaskActivity extends AppCompatActivity {
     DatePickerDialog s_datePickerDialog, c_datePickerDialog;
     MaterialButton button;
     BottomAppBar backButton;
-    Calendar calendar;
-    int currentYear;
-    int currentMonth;
-    int currentDay;
-    int currentHour;
-    int currentMinute;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fix_task);
+
+        // int task_db_Id = getIntent().getIntExtra("task_db_Id", -1);
+        int currentYear = 0, currentMonth = 0, currentDay = 0, currentHour = 0, currentMinute = 0; // just temp
+
 
         taskName_inputLayout = findViewById(R.id.fix_text_input_taskName);
         taskStartDate_inputLayout = findViewById(R.id.fix_text_input_taskStartDate);
@@ -48,15 +46,6 @@ public class FixTaskActivity extends AppCompatActivity {
         taskMemo_inputLayout = findViewById(R.id.fix_text_input_taskMemo);
 
 
-        button = findViewById(R.id.updateNewTask);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                closeKeyboard();
-            }
-        });
-
         backButton = findViewById(R.id.bottomAppBar);
         backButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +53,8 @@ public class FixTaskActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        button = findViewById(R.id.updateNewTask);
 
 
         EditText startDate = taskStartDate_inputLayout.getEditText();
@@ -76,10 +67,6 @@ public class FixTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 closeKeyboard();
-                calendar = Calendar.getInstance();
-                currentYear = calendar.get(Calendar.YEAR);
-                currentMonth = calendar.get(Calendar.MONTH);
-                currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
                 s_datePickerDialog = new DatePickerDialog(FixTaskActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -107,9 +94,7 @@ public class FixTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 closeKeyboard();
-                calendar = Calendar.getInstance();
-                currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                currentMinute = calendar.get(Calendar.MINUTE);
+
 
 
                 s_timePickerDialog = new TimePickerDialog(FixTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -138,10 +123,6 @@ public class FixTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 closeKeyboard();
-                calendar = Calendar.getInstance();
-                currentYear = calendar.get(Calendar.YEAR);
-                currentMonth = calendar.get(Calendar.MONTH);
-                currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
                 c_datePickerDialog = new DatePickerDialog(FixTaskActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -169,9 +150,6 @@ public class FixTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 closeKeyboard();
-                calendar = Calendar.getInstance();
-                currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-                currentMinute = calendar.get(Calendar.MINUTE);
 
 
                 c_timePickerDialog = new TimePickerDialog(FixTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -193,6 +171,14 @@ public class FixTaskActivity extends AppCompatActivity {
                 }, currentHour, currentMinute, false);
 
                 c_timePickerDialog.show();
+            }
+        });
+
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeKeyboard();
             }
         });
 

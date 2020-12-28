@@ -20,6 +20,7 @@ import com.example.myplanner.FixTaskActivity;
 import com.example.myplanner.R;
 import com.example.myplanner.Task;
 import com.example.myplanner.dataHelper.Converter;
+import com.example.myplanner.dataHelper.MessageHelper;
 import com.example.myplanner.dataHolder.CompletedTasksData;
 import com.example.myplanner.dataHolder.RecycleViewData;
 import com.example.myplanner.dataHolder.UncompletedTasksData;
@@ -51,9 +52,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnItemClickListener {
-        void onDeleteClick(int position);
+        void onDeleteClick(int task_db_Id);
 
-        void onInsertClick(int position);
+        void onInsertClick(int task_db_Id);
 
     }
 
@@ -80,28 +81,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if(holder instanceof TaskViewHolder){
-            TempTask task = dataItems.get(position).getTaskInfo();
+            UncompletedTasksData task = dataItems.get(position).getCheckListViewData();
 
-            ((TaskViewHolder) holder).taskTitle.setText(task.getTaskTitle());
-
-            int minLeft = task.getTaskTimeLeft();
-
-            if(minLeft>=60){
-                int hours = minLeft/60;
-                if(minLeft%60==0){
-                    ((TaskViewHolder) holder).taskTimeLeft.setText("开始前"+hours+"小时");
-
-                }else{
-                    int mins = minLeft - (hours*60);
-                    ((TaskViewHolder) holder).taskTimeLeft.setText("开始前"+hours+"小时"+mins+"分钟");
-
-                }
-            }else{
-                ((TaskViewHolder) holder).taskTimeLeft.setText("开始前"+minLeft+"分钟");
-            }
-
-            ((TaskViewHolder) holder).taskPlace.setText(task.getTaskPlace());
-            ((TaskViewHolder) holder).taskMemo.setText(task.getTaskMemo());
+            ((TaskViewHolder) holder).taskTitle.setText(task.getTask_Name());
+            ((TaskViewHolder) holder).taskTimeLeft.setText(task.getTask_TimeMsg());
+            ((TaskViewHolder) holder).taskPlace.setText(task.getTask_Place());
+            ((TaskViewHolder) holder).taskMemo.setText(task.getTask_Memo());
 
 
             boolean isExpandable = task.isExpandable();
@@ -109,16 +94,16 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         }
         else if(holder instanceof HeadViewHolder){
-            TempHead head = dataItems.get(position).getHeadInfo();
+            CompletedTasksData head = dataItems.get(position).getAnalysisViewData();
 
-            ((HeadViewHolder) holder).taskDate.setText(head.getTaskDate());
-            ((HeadViewHolder) holder).taskTotal.setText("总数  "+head.getTaskTotal());
-            ((HeadViewHolder) holder).taskCompletedNum.setText("完成  "+head.getTaskCompletedNum());
-            ((HeadViewHolder) holder).taskCompletedInTimeNum.setText("(时间内完成  "+head.getTaskCompletedInTimeNum()+")");
-            ((HeadViewHolder) holder).taskNotCompletedNum.setText("未完  "+head.getTaskNotCompletedNum());
+            ((HeadViewHolder) holder).taskDate.setText(head.getTask_Date());
+            ((HeadViewHolder) holder).taskTotal.setText("总数  "+head.getTask_Total());
+            ((HeadViewHolder) holder).taskCompletedNum.setText("完成  "+head.getTask_CompletedNum());
+            ((HeadViewHolder) holder).taskCompletedInTimeNum.setText("(时间内完成  "+head.getTask_CompletedInTimeNum()+")");
+            ((HeadViewHolder) holder).taskNotCompletedNum.setText("未完  "+head.getTask_UncompletedNum());
 
-            int totalEfficiency = countTotalEfficiency(head.getCompletedTasks());
-            ((HeadViewHolder) holder).totalTaskEfficiency.setText(printSubtractedMin(totalEfficiency));
+            int totalEfficiency = head.getTask_TotalEfficiency();
+            ((HeadViewHolder) holder).totalTaskEfficiency.setText( MessageHelper.changeToHour_Min(totalEfficiency, true) );
 
             //양수가 좋은거임 efficiencyMin = 목표시간(9시30분) - 리얼완성시간(9시15분)
             //음수일 경우    efficiencyMin = 목표시간(9시30분) - 리얼완성시간(9시45분)
@@ -131,15 +116,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
 
-            setPieChart( ((HeadViewHolder) holder).taskPieChart, head.getTaskCompletedInTimeNum() ,head.getTaskCompletedNum() - head.getTaskCompletedInTimeNum());
+            setPieChart( ((HeadViewHolder) holder).taskPieChart, head.getTask_CompletedInTimeNum() ,head.getTask_CompletedNum() - head.getTask_CompletedInTimeNum());
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(
                     ((HeadViewHolder) holder).completedRecyclerView.getContext(),
                     LinearLayoutManager.VERTICAL,
                     false
             );
-            layoutManager.setInitialPrefetchItemCount(head.getCompletedTasks().size());
-            completedTaskAdapter = new CompletedTaskAdapter(head.getCompletedTasks(), context);
+            layoutManager.setInitialPrefetchItemCount(head.getCompletedRecycleViewDataList().size());
+            completedTaskAdapter = new CompletedTaskAdapter(head.getCompletedRecycleViewDataList(), context);
 
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
             dividerItemDecoration.setDrawable(context.getResources().getDrawable(R.drawable.completed_recycleview_divider));
@@ -152,8 +137,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             boolean isExpandable = head.isExpandable();
             ((HeadViewHolder) holder).expandableCompletedTaskLayout.setVisibility(isExpandable? View.VISIBLE : View.GONE);
             ((HeadViewHolder) holder).expandable_icon.setVisibility(isExpandable? View.GONE : View.VISIBLE);
-
-
 
         }
     }
@@ -277,7 +260,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             fixButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openFixTaskActivity();
+                    int position = getAdapterPosition();
+                    RecycleViewData recycleViewData = dataItems.get(position);
+                    UncompletedTasksData to_FixTask = recycleViewData.getCheckListViewData();
+                    openFixTaskActivity( to_FixTask.getTask_db_index() );
                 }
             });
 
@@ -317,12 +303,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void openFixTaskActivity(){
+    public void openFixTaskActivity(int task_db_Id){
         Intent intent = new Intent(context, FixTaskActivity.class);
-
-        /**
-         * extras 추가해야됨!
-         */
+        intent.putExtra("task_db_Id", task_db_Id);
         context.startActivity(intent);
     }
 
