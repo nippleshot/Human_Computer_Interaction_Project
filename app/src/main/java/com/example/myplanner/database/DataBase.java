@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Time格式是HH:mm
  */
 public class DataBase {
-    private final int VERSION = 0;
+    private final int VERSION = 1;
 
     private DataBaseHelper dbHelper; //helper
 
@@ -36,7 +36,7 @@ public class DataBase {
 
     private static DataBase dataBase; //class
 
-    private ArrayList<Task> taskArrayList; //return list
+    // private ArrayList<Task> taskArrayList; //return list
 
     //private int level = -1; //return level
 
@@ -68,46 +68,6 @@ public class DataBase {
         }
         return dataBase;
     }
-
-//    /**
-//     * provide level
-//     * @return current level
-//     */
-//    public int getLevel(){
-//        Cursor cursor = taskTables.query(DataBaseHelper.LEVEL_TABLE_NAME,null,null,null,null,null,null,null);
-//        if(cursor.moveToFirst()){
-//            do{
-//                level = cursor.getInt(cursor.getColumnIndex("level"));
-//            }while (cursor.moveToNext());
-//        }
-//        cursor.close();
-//        return level;
-//    }
-//
-//    /**
-//     * set variable level
-//     * @param level
-//     */
-//    public void setLevel(int level) {
-//        if(getLevel()==-1){
-//            levelCreate(level);
-//        }else{
-//            ContentValues contentValues = new ContentValues();
-//            contentValues.put("level",level);
-//            taskTables.update(DataBaseHelper.LEVEL_TABLE_NAME, contentValues,
-//                    "level = ?", new String[]{String.valueOf(level)});
-//        }
-//        this.level = level;
-//    }
-//
-//    /**
-//     * create level
-//     */
-//    private void levelCreate(int level){
-//        ContentValues contentValues =new ContentValues();
-//        contentValues.put("level",level);
-//        taskTables.insert(DataBaseHelper.LEVEL_TABLE_NAME,null,contentValues);
-//    }
 
     /**
      * add task in database
@@ -145,7 +105,6 @@ public class DataBase {
             do{
                 Task task = getTaskByCursor(cursor);
                 arrayList.add(task);
-                arrayList = sortArrayList(arrayList);
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -255,14 +214,49 @@ public class DataBase {
         return sortDateArrayList(res);
     }
 
-    private ArrayList sortDateArrayList(ArrayList<String> arrayList){
-        // Date格式是yyyy/MM/dd
-        for(int i = 0; i < arrayList.size() ; i++){
-            for(int j = i + 1 ; j < arrayList.size() ; j++){
+    /**
+     * Date格式是yyyy/MM/dd
+     * @param dateList anArrayList with all dates
+     * @return
+     */
+    private ArrayList sortDateArrayList(ArrayList<String> dateList){
+        for(int i = 0; i < dateList.size() ; i++){
+            for(int j = i + 1 ; j < dateList.size() ; j++){
 
+                // compare year
+                if(dateList.get(i).substring(0, 4).equals(dateList.get(j).substring(0, 4))){
+
+                    // compare month
+                    if(dateList.get(i).substring(5, 7).equals(dateList.get(j).substring(5, 7))){
+
+                        // compare day
+                        if(Integer.parseInt(dateList.get(i).substring(8)) >
+                                Integer.parseInt(dateList.get(j).substring(8))){
+                            String s = dateList.get(i);
+                            dateList.remove(i);
+                            dateList.add(i, dateList.get(j));
+                            dateList.remove(j);
+                            dateList.add(j, s);
+                        }
+                    }else if(Integer.parseInt(dateList.get(i).substring(5, 7)) >
+                            Integer.parseInt(dateList.get(j).substring(5, 7))){
+                        String s = dateList.get(i);
+                        dateList.remove(i);
+                        dateList.add(i, dateList.get(j));
+                        dateList.remove(j);
+                        dateList.add(j, s);
+                    }
+                }else if(Integer.parseInt(dateList.get(i).substring(0, 4)) >
+                        Integer.parseInt(dateList.get(j).substring(0, 4))){
+                    String s = dateList.get(i);
+                    dateList.remove(i);
+                    dateList.add(i, dateList.get(j));
+                    dateList.remove(j);
+                    dateList.add(j, s);
+                }
             }
         }
-        return arrayList;
+        return dateList;
     }
 
     public ArrayList getTasksByDate(String taskStartDate){
@@ -277,73 +271,34 @@ public class DataBase {
     }
 
     /**
-     * sort ArrayList by
-     * @param arrayList ArrayList need to be edit
+     * sort ArrayList by time
+     * Time格式是HH:mm
+     * @param taskList ArrayList need to be edit
      */
-    private ArrayList sortArrayList(ArrayList<Task> arrayList){
-        // Time格式是HH:mm
-
-        return arrayList;
+    private ArrayList sortArrayList(ArrayList<Task> taskList){
+        for(int i = 0; i < taskList.size() ; i++){
+            for(int j = i + 1 ; j < taskList.size() ; j++) {
+                if(taskList.get(i).getTaskStartTime().substring(0, 2).equals(taskList.get(j).getTaskStartTime().substring(0, 2))){
+                    if(Integer.parseInt(taskList.get(i).getTaskStartTime().substring(3)) >
+                            Integer.parseInt(taskList.get(j).getTaskStartTime().substring(3))){
+                        Task task = taskList.get(i);
+                        taskList.remove(i);
+                        taskList.add(i, taskList.get(j));
+                        taskList.remove(j);
+                        taskList.add(j, task);
+                    }
+                } else if(Integer.parseInt(taskList.get(i).getTaskStartTime().substring(0, 2)) >
+                        Integer.parseInt(taskList.get(j).getTaskStartTime().substring(0, 2))){
+                    Task task = taskList.get(i);
+                    taskList.remove(i);
+                    taskList.add(i, taskList.get(j));
+                    taskList.remove(j);
+                    taskList.add(j, task);
+                }
+            }
+        }
+        return taskList;
     }
-
-//    public ArrayList getTaskList(){
-//        return taskArrayList;
-//    }
-
-//    /**
-//     * get id list in database
-//     * @param date the number between today and that day
-//     * @return String tuple
-//     */
-//    private String[] getIdList(int date){
-//        String res = "";
-//        Cursor cursor = taskTables.query(DataBaseHelper.HISTORY_TABLE_NAME,null,null,null,null,null,null);
-//        if(cursor.moveToFirst()){
-//            do{
-//                int tem = cursor.getInt(cursor.getColumnIndex("date"));
-//                if(date==tem){
-//                    res = cursor.getString(cursor.getColumnIndex("ids_str"));
-//                }
-//            }while(cursor.moveToNext());
-//        }
-//        cursor.close();
-//        return res.split(";");
-//    }
-
-
-//    /**get day which they want
-//     * @param date the number between today and that day
-//     * @return
-//     */
-//    public ArrayList getHistoryTable(int date){
-//        String[] ids = getIdList(date);
-//        for(int i = 0;i < ids.length;i++){
-//            Task task = getTaskById(Integer.parseInt(ids[i]));
-//            historyTaskArrayList.add(task);
-//            sortArrayList(historyTaskArrayList);
-//        }
-//        return historyTaskArrayList;
-//    }
-
-//    /**
-//     * set data in database
-//     * @param date thing need to input
-//     */
-//    public void setHistoryTable(int date){
-//        ContentValues contentValues = new ContentValues();
-//        ArrayList<Task> arrayList = retrieve();
-//        String str = "";
-//        for (int i = 0;i < arrayList.size();i++){
-////            if(arrayList.get(i).isRepeat()){
-////                str = str + arrayList.get(i).getTaskId() + ";";
-////            }
-//        }
-//        str = str.substring(1,str.length()-1);
-//        contentValues.put("date",date);
-//        contentValues.put("ids_str",str);
-//        taskTables.insert(DataBaseHelper.HISTORY_TABLE_NAME,null, contentValues);
-//    }
-
 
 //    /**
 //     * Thread class
