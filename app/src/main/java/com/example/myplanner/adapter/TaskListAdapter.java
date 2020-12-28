@@ -96,7 +96,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         else if(holder instanceof HeadViewHolder){
             CompletedTasksData head = dataItems.get(position).getAnalysisViewData();
 
-            ((HeadViewHolder) holder).taskDate.setText(head.getTask_Date());
+            ((HeadViewHolder) holder).taskDate.setText(MessageHelper.changeToYear(head.getTask_Date())+MessageHelper.changeToMonth_Day(head.getTask_Date()));
             ((HeadViewHolder) holder).taskTotal.setText("总数  "+head.getTask_Total());
             ((HeadViewHolder) holder).taskCompletedNum.setText("完成  "+head.getTask_CompletedNum());
             ((HeadViewHolder) holder).taskCompletedInTimeNum.setText("(时间内完成  "+head.getTask_CompletedInTimeNum()+")");
