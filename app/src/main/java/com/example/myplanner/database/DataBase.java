@@ -12,12 +12,20 @@ import java.util.ArrayList;
 /**
  * call getDataBase(this) to get the single database
  * call createTask(Task task) to add task in the database and return task id
- * call retrieve() to get the list of tasks
+ * call retrieve() to get an ArrayList with all tasks
  * call deleteTask(Task task) to delete the task
  * call updateTask(Task task) to update the task
+ * call getTaskById(int id) to get task by id
+ * call getTasksByDate(String taskStartDate) to get task ArrayList by date
+ * call getAllDate() to get an ArrayList with all date
 **/
+
+/**
+ * Date格式是yyyy/MM/dd
+ * Time格式是HH:mm
+ */
 public class DataBase {
-    private final int VERSION = 0;
+    private final int VERSION = 1;
 
     private DataBaseHelper dbHelper; //helper
 
@@ -29,9 +37,9 @@ public class DataBase {
 
     private static DataBase dataBase; //class
 
-    private ArrayList<Task> taskArrayList; //return list
+    // private ArrayList<Task> taskArrayList; //return list
 
-    private int level = -1; //return level
+    //private int level = -1; //return level
 
     private ArrayList<Task> historyTaskArrayList;
 
@@ -43,8 +51,8 @@ public class DataBase {
         this.context = context;
         dbHelper = new DataBaseHelper(context, DATA_BASE_NAME, null, VERSION);
         taskTables = dbHelper.getWritableDatabase();
-        LoadData loadData = new LoadData();
-        loadData.run();
+        //LoadData loadData = new LoadData();
+        //loadData.run();
     }
 
     /**return database manager
@@ -64,46 +72,6 @@ public class DataBase {
     }
 
     /**
-     * provide level
-     * @return current level
-     */
-    public int getLevel(){
-        Cursor cursor = taskTables.query(DataBaseHelper.LEVEL_TABLE_NAME,null,null,null,null,null,null,null);
-        if(cursor.moveToFirst()){
-            do{
-                level = cursor.getInt(cursor.getColumnIndex("level"));
-            }while (cursor.moveToNext());
-        }
-        cursor.close();
-        return level;
-    }
-
-    /**
-     * set variable level
-     * @param level
-     */
-    public void setLevel(int level) {
-        if(getLevel()==-1){
-            levelCreate(level);
-        }else{
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("level",level);
-            taskTables.update(DataBaseHelper.LEVEL_TABLE_NAME, contentValues,
-                    "level = ?", new String[]{String.valueOf(level)});
-        }
-        this.level = level;
-    }
-
-    /**
-     * create level
-     */
-    private void levelCreate(int level){
-        ContentValues contentValues =new ContentValues();
-        contentValues.put("level",level);
-        taskTables.insert(DataBaseHelper.LEVEL_TABLE_NAME,null,contentValues);
-    }
-
-    /**
      * add task in database
      * @param task the task which need to be added
      * @return new task id
@@ -111,10 +79,15 @@ public class DataBase {
 
     public int createTask(Task task){
         ContentValues contentValues = new ContentValues();
-        String taskName = task.getTaskName();
 
         //contentValues input
-        contentValues.put("task_name", taskName);
+        contentValues.put("task_name", task.getTaskName());
+        contentValues.put("task_start_date", task.getTaskStartDate());
+        contentValues.put("task_start_time", task.getTaskStartTime());
+        contentValues.put("task_complete_date", task.getTaskCompleteDate());
+        contentValues.put("task_complete_time", task.getTaskCompleteTime());
+        contentValues.put("task_place", task.getTaskPlace());
+        contentValues.put("task_memo", task.getTaskMemo());
         contentValues.put("is_complete", false);
         contentValues.put("is_complete_in_time", false);
 
@@ -132,9 +105,8 @@ public class DataBase {
         Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME,null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
-                Task task = cursorFind(cursor);
+                Task task = getTaskByCursor(cursor);
                 arrayList.add(task);
-                arrayList = sortArrayList(arrayList);
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -146,29 +118,19 @@ public class DataBase {
      * @param cursor
      * @return
      */
-    private Task cursorFind(Cursor cursor){
-        int id = cursor.getInt(cursor.getColumnIndex("id"));
-        String taskName = cursor.getString(cursor.getColumnIndex("task_name"));
-        int hour = cursor.getInt(cursor.getColumnIndex("hour"));
-        int min = cursor.getInt(cursor.getColumnIndex("min"));
-        String hourstr;
-        if(hour<10){
-            hourstr = "0" + hour;
-        }else{
-            hourstr = "" + hour;
-        }
-        String minstr;
-        if(min < 10){
-            minstr = "0" + min;
-        }else{
-            minstr = "" + min;
-        }
-        int imageId = cursor.getInt(cursor.getColumnIndex("image_id"));
-        int done = cursor.getInt(cursor.getColumnIndex("done"));
-        int repeat = cursor.getInt(cursor.getColumnIndex("repeat"));
-        boolean Bdone = (done==1);
-        boolean Brepeat = (repeat==1);
-        return new Task(id, taskName);
+    private Task getTaskByCursor(Cursor cursor){
+        return new Task(cursor.getInt(cursor.getColumnIndex("id")),
+                cursor.getString(cursor.getColumnIndex("task_name")),
+                cursor.getString(cursor.getColumnIndex("task_start_date")),
+                cursor.getString(cursor.getColumnIndex("task_start_time")),
+                cursor.getString(cursor.getColumnIndex("task_complete_date")),
+                cursor.getString(cursor.getColumnIndex("task_complete_time")),
+                cursor.getString(cursor.getColumnIndex("task_real_complete_date")),
+                cursor.getString(cursor.getColumnIndex("task_real_complete_time")),
+                cursor.getString(cursor.getColumnIndex("task_place")),
+                cursor.getString(cursor.getColumnIndex("task_real_memo")),
+                (cursor.getInt(cursor.getColumnIndex("is_complete")) == 1),
+                (cursor.getInt(cursor.getColumnIndex("is_complete_in_time")) == 1));
     }
 
     /**
@@ -191,193 +153,163 @@ public class DataBase {
      * @param id task which you want to find
      * @return found task
      */
-    private Task findTaskById(int id){
-        Task res = new Task("");
+    public Task getTaskById(int id){
         Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME,null,null,null,null,null,null);
+        Task task = null;
         if(cursor.moveToFirst()){
             do{
                 int taskId = cursor.getInt(cursor.getColumnIndex("id"));
-                if(taskId==id){
-                    res = cursorFind(cursor);
+                if(taskId == id){
+                    task = getTaskByCursor(cursor);
                 }
             }while(cursor.moveToNext());
         }
         cursor.close();
-        return res;
+        return task;
     }
 
 
     /**
      * modify task in database
-     *
+     * @param task the task needed to be update
      */
-    public void updateTask(Task taskUp){
+    public void updateTask(Task task){
 
         //modify difference
         ContentValues contentValues = new ContentValues();
-        contentValues.put("task_name",taskUp.getTaskName());
-        //String taskTime = taskUp.getTaskTime();
-//        int hour;
-//        int min;
-//        try{
-//            hour = Integer.parseInt(taskTime.substring(0,taskTime.indexOf(":")));
-//            min = Integer.parseInt(taskTime.substring(taskTime.indexOf(":") + 1));
-//        }catch(Exception e){
-//            hour = 0;
-//            min = 0;
-//        }
-//        contentValues.put("hour",hour);
+        contentValues.put("task_name",task.getTaskName());
+        contentValues.put("task_start_date", task.getTaskStartDate());
+        contentValues.put("task_start_time", task.getTaskStartTime());
+        contentValues.put("task_complete_date", task.getTaskCompleteDate());
+        contentValues.put("task_complete_time", task.getTaskCompleteTime());
+        contentValues.put("task_real_complete_date", task.getTaskRealCompleteDate());
+        contentValues.put("task_real_complete_time", task.getTaskRealCompleteTime());
+        contentValues.put("task_place", task.getTaskPlace());
+        contentValues.put("task_memo", task.getTaskMemo());
+        contentValues.put("is_complete", task.isCompleted());
+        contentValues.put("is_complete_in_time", task.isCompletedInTime());
 
-        //upgrade
-        if(contentValues.size() == 0){
-            //return taskArrayList;
-        }
-        taskTables.update(DataBaseHelper.TABLE_NAME,contentValues,
-                "id=?",new String[]{String.valueOf(taskUp.getTaskId())});
-        updateArrayList("up",taskUp);
-
-        //return taskArrayList;
+        taskTables.update(DataBaseHelper.TABLE_NAME, contentValues,
+                "id=?", new String[]{String.valueOf(task.getTaskId())});
+        //updateArrayList("up",task);
     }
 
     /**
      *delete task in database
-     * @param taskDel the task needed to be deleted
+     * @param task the task needed to be deleted
      */
-    public void deleteTask(Task taskDel){
+    public void deleteTask(Task task){
         taskTables.delete(DataBaseHelper.TABLE_NAME,
-                "id = ?",new String[]{String.valueOf(taskDel.getTaskId())});
-        updateArrayList("del",taskDel);
+                "id = ?", new String[]{String.valueOf(task.getTaskId())});
+        //updateArrayList("del",task);
         //return taskArrayList;
     }
 
-
-    /**
-     * upgrade ArrayList
-     * @param action which method use this method
-     * @param task the task should be update
-     */
-    private void updateArrayList(String action,Task task){
-        int taskId = task.getTaskId();
-        if(action.equals("add")){
-            taskArrayList.add(task);
-        }else if(action.equals("del")){
-            taskArrayList.remove(task);
-        }else if(action.equals("up")){
-            taskArrayList.remove(taskArrayList.indexOf(task));
-            taskArrayList.add(task);
-        }
-        sortArrayList(taskArrayList);
-    }
-
-
-    /**
-     * sort ArrayList
-     * @param arrayList ArrayList need to be edit
-     */
-    private ArrayList sortArrayList(ArrayList<Task> arrayList){
-        if(arrayList.size()==0){
-            return arrayList;
-        }
-        Task task = arrayList.get(arrayList.size()-1);
-//        int taskHour = Integer.parseInt(task.getTaskTime().substring(0,2));
-//        int taskMin = Integer.parseInt(task.getTaskTime().substring(3));
-//        int i = 0;
-//        Task lastTask = arrayList.get(i);
-//        int lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
-//        int lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
-
-//        for(i = 0;i < arrayList.size();i++){
-//            if(taskHour<lastHour){
-//                break;
-//            }else if(taskHour==lastHour){
-//                if(taskMin<lastMin){
-//                    break;
-//                }else if(taskMin==lastMin){
-//                    break;
-//                }
-//            }
-//            lastTask = arrayList.get(i);
-//            lastHour = Integer.parseInt(lastTask.getTaskTime().substring(0,2));
-//            lastMin = Integer.parseInt(lastTask.getTaskTime().substring(3));
-//        }
-//
-//        if(i > 0){
-//            arrayList.add(i-1,task);
-//        }else{
-//            arrayList.add(0,task);
-//        }
-
-        arrayList.remove(arrayList.size()-1);
-        return arrayList;
-    }
-
-    public ArrayList getTaskList(){
-        return taskArrayList;
-    }
-
-    /**
-     * get id list in database
-     * @param date the number between today and that day
-     * @return String tuple
-     */
-    private String[] getIdList(int date){
-        String res = "";
-        Cursor cursor = taskTables.query(DataBaseHelper.HISTORY_TABLE_NAME,null,null,null,null,null,null);
+    public ArrayList getAllDate(){
+        Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME,new String[]{"task_start_date"},null,null,null,null,null);
+        ArrayList<String> res = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                int tem = cursor.getInt(cursor.getColumnIndex("date"));
-                if(date==tem){
-                    res = cursor.getString(cursor.getColumnIndex("ids_str"));
-                }
+                res.add(cursor.getString(cursor.getColumnIndex("task_start_date")));
             }while(cursor.moveToNext());
         }
-        cursor.close();
-        return res.split(";");
+        return sortDateArrayList(res);
     }
 
-
-    /**get day which they want
-     * @param date the number between today and that day
+    /**
+     * Date格式是yyyy/MM/dd
+     * @param dateList anArrayList with all dates
      * @return
      */
-    public ArrayList getHistoryTable(int date){
-        String[] ids = getIdList(date);
-        for(int i = 0;i < ids.length;i++){
-            Task task = findTaskById(Integer.parseInt(ids[i]));
-            historyTaskArrayList.add(task);
-            sortArrayList(historyTaskArrayList);
+    private ArrayList sortDateArrayList(ArrayList<String> dateList){
+        for(int i = 0; i < dateList.size() ; i++){
+            for(int j = i + 1 ; j < dateList.size() ; j++){
+
+                // compare year
+                if(dateList.get(i).substring(0, 4).equals(dateList.get(j).substring(0, 4))){
+
+                    // compare month
+                    if(dateList.get(i).substring(5, 7).equals(dateList.get(j).substring(5, 7))){
+
+                        // compare day
+                        if(Integer.parseInt(dateList.get(i).substring(8)) >
+                                Integer.parseInt(dateList.get(j).substring(8))){
+                            String s = dateList.get(i);
+                            dateList.remove(i);
+                            dateList.add(i, dateList.get(j));
+                            dateList.remove(j);
+                            dateList.add(j, s);
+                        }
+                    }else if(Integer.parseInt(dateList.get(i).substring(5, 7)) >
+                            Integer.parseInt(dateList.get(j).substring(5, 7))){
+                        String s = dateList.get(i);
+                        dateList.remove(i);
+                        dateList.add(i, dateList.get(j));
+                        dateList.remove(j);
+                        dateList.add(j, s);
+                    }
+                }else if(Integer.parseInt(dateList.get(i).substring(0, 4)) >
+                        Integer.parseInt(dateList.get(j).substring(0, 4))){
+                    String s = dateList.get(i);
+                    dateList.remove(i);
+                    dateList.add(i, dateList.get(j));
+                    dateList.remove(j);
+                    dateList.add(j, s);
+                }
+            }
         }
-        return historyTaskArrayList;
+        return dateList;
+    }
+
+    public ArrayList getTasksByDate(String taskStartDate){
+        Cursor cursor = taskTables.query(DataBaseHelper.TABLE_NAME, null, "task_start_date = ?", new String[]{ taskStartDate }, null, null, null);
+        ArrayList<Task> res = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do{
+                res.add(getTaskByCursor(cursor));
+            }while(cursor.moveToNext());
+        }
+        return res;
     }
 
     /**
-     * set data in database
-     * @param date thing need to input
+     * sort ArrayList by time
+     * Time格式是HH:mm
+     * @param taskList ArrayList need to be edit
      */
-    public void setHistoryTable(int date){
-        ContentValues contentValues = new ContentValues();
-        ArrayList<Task> arrayList = retrieve();
-        String str = "";
-        for (int i = 0;i < arrayList.size();i++){
-//            if(arrayList.get(i).isRepeat()){
-//                str = str + arrayList.get(i).getTaskId() + ";";
-//            }
+    private ArrayList sortArrayList(ArrayList<Task> taskList){
+        for(int i = 0; i < taskList.size() ; i++){
+            for(int j = i + 1 ; j < taskList.size() ; j++) {
+                if(taskList.get(i).getTaskStartTime().substring(0, 2).equals(taskList.get(j).getTaskStartTime().substring(0, 2))){
+                    if(Integer.parseInt(taskList.get(i).getTaskStartTime().substring(3)) >
+                            Integer.parseInt(taskList.get(j).getTaskStartTime().substring(3))){
+                        Task task = taskList.get(i);
+                        taskList.remove(i);
+                        taskList.add(i, taskList.get(j));
+                        taskList.remove(j);
+                        taskList.add(j, task);
+                    }
+                } else if(Integer.parseInt(taskList.get(i).getTaskStartTime().substring(0, 2)) >
+                        Integer.parseInt(taskList.get(j).getTaskStartTime().substring(0, 2))){
+                    Task task = taskList.get(i);
+                    taskList.remove(i);
+                    taskList.add(i, taskList.get(j));
+                    taskList.remove(j);
+                    taskList.add(j, task);
+                }
+            }
         }
-        str = str.substring(1,str.length()-1);
-        contentValues.put("date",date);
-        contentValues.put("ids_str",str);
-        taskTables.insert(DataBaseHelper.HISTORY_TABLE_NAME,null, contentValues);
+        return taskList;
     }
 
-
-    /**
-     * Thread class
-     */
-    class LoadData implements Runnable{
-        @Override
-        public void run() {
-            taskArrayList = retrieve();
-            getLevel();
-        }
-    }
+//    /**
+//     * Thread class
+//     */
+//    class LoadData implements Runnable{
+//        @Override
+//        public void run() {
+//            taskArrayList = retrieve();
+//            //getLevel();
+//        }
+//    }
 }
