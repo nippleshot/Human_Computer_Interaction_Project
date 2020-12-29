@@ -2,6 +2,7 @@ package com.example.myplanner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myplanner.adapter.TaskListAdapter;
 import com.example.myplanner.dataHelper.TaskHelper;
+import com.example.myplanner.dataHolder.RecycleViewData;
 import com.example.myplanner.database.DataBase;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,6 +43,8 @@ public class OneDayTaskActivity extends AppCompatActivity {
         day_Tasks = dataBase.getTasksByDate(day_Date);
         recyclerView = findViewById(R.id.taskRecyclerView);
 
+//        Log.i("OneDayTaskActivity", "(Before setRecycleview) getIntent().getExtras() ==> " + day_Date );
+//        Log.i("OneDayTaskActivity", "(Before setRecycleview) day_Tasks.size ==> " + day_Tasks.size() );
         setRecycleView();
 
 
@@ -49,6 +53,7 @@ public class OneDayTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openAddTaskActivity();
+                finish();
             }
         });
 
@@ -56,7 +61,8 @@ public class OneDayTaskActivity extends AppCompatActivity {
         backButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                openMainTaskActivity();
+                finish();
             }
         });
     }
@@ -65,6 +71,13 @@ public class OneDayTaskActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddTaskActivity.class);
         startActivity(intent);
     }
+
+    public void openMainTaskActivity(){
+        Intent intent = new Intent(this, MainStaggeredActivity.class);
+        startActivity(intent);
+    }
+
+
 
 
     private void setRecycleView() {
@@ -75,23 +88,31 @@ public class OneDayTaskActivity extends AppCompatActivity {
         taskListAdapter.setOnItemClickListener(new TaskListAdapter.OnItemClickListener() {
 
             @Override
-            public void onDeleteClick(int task_db_Id) {
+            public void onDeleteClick(int task_db_Id, RecycleViewData recycleViewData, int position) {
                 Task tempTask = dataBase.getTaskById(task_db_Id);
+
 
                 // 데이터베이스 안에 TasK를 삭제하기
                 // taskListAdapter 한테 day_Tasks가 변경됬다고 알리기
                 dataBase.deleteTask(new Task(task_db_Id));
-                day_Tasks = dataBase.getTasksByDate(day_Date);
-                taskListAdapter.notifyDataSetChanged();
+
+                taskListAdapter.dataItems.remove(position);
+                taskListAdapter.notifyItemRemoved(position);
+                taskListAdapter.dataItems.get(0).getAnalysisViewData().update_delete();
+                taskListAdapter.notifyItemChanged(0);
+
 
                 Snackbar snackbar =  Snackbar.make(recyclerView, "确定删除该任务?", Snackbar.LENGTH_LONG).setAction("取消", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         // 데이터베이스 안에 TasK를 추가하기
                         // taskListAdapter 한테 day_Tasks가 변경됬다고 알리기
-                        dataBase.createTask(tempTask);
-                        day_Tasks = dataBase.getTasksByDate(day_Date);
-                        taskListAdapter.notifyDataSetChanged();
+                        int new_db_id = dataBase.createTask(tempTask);
+                        recycleViewData.getCheckListViewData().setTask_db_index(new_db_id);
+                        taskListAdapter.dataItems.add(position, recycleViewData);
+                        taskListAdapter.notifyItemInserted(position);
+                        taskListAdapter.dataItems.get(0).getAnalysisViewData().update_undelete();
+                        taskListAdapter.notifyItemChanged(0);
 
                         Snackbar snackbar1 = Snackbar.make(recyclerView, "没删除了", Snackbar.LENGTH_SHORT);
                         snackbar1.show();
@@ -103,7 +124,7 @@ public class OneDayTaskActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onInsertClick(int task_db_Id) {
+            public void onInsertClick(int task_db_Id, RecycleViewData recycleViewData, int position) {
                 Task tempTask = dataBase.getTaskById(task_db_Id);
 
                 // 1. 데이터베이스 안에 Task.taskRealCompleteDate&Time에 현재시간 추가
@@ -125,9 +146,16 @@ public class OneDayTaskActivity extends AppCompatActivity {
                     }
                 }
 
+                int tempTaskEfficiency = TaskHelper.countGapInMin(tempTask);
                 dataBase.updateTask(tempTask);
-                day_Tasks = dataBase.getTasksByDate(day_Date);
-                taskListAdapter.notifyDataSetChanged();
+
+
+                taskListAdapter.dataItems.remove(position);
+                taskListAdapter.notifyItemRemoved(position);
+                taskListAdapter.dataItems.get(0).getAnalysisViewData().update( tempTask );
+                taskListAdapter.notifyItemChanged(0);
+                taskListAdapter.completedTaskAdapter.notifyItemChanged(0);
+
 
                 Snackbar snackbar =  Snackbar.make(recyclerView, "确定完成了该任务?", Snackbar.LENGTH_LONG).setAction("取消", new View.OnClickListener() {
                     @Override
@@ -143,13 +171,19 @@ public class OneDayTaskActivity extends AppCompatActivity {
                         tempTask.setCompletedInTime( false );
 
                         dataBase.updateTask(tempTask);
-                        day_Tasks = dataBase.getTasksByDate(day_Date);
-                        taskListAdapter.notifyDataSetChanged();
+
+                        taskListAdapter.dataItems.add(position, recycleViewData);
+                        taskListAdapter.notifyItemInserted(position);
+                        taskListAdapter.dataItems.get(0).getAnalysisViewData().downdate(tempTask, tempTaskEfficiency);
+                        taskListAdapter.notifyItemChanged(0);
+                        taskListAdapter.completedTaskAdapter.notifyDataSetChanged();
+
 
                         Snackbar snackbar1 = Snackbar.make(recyclerView, "没表示为完成了", Snackbar.LENGTH_SHORT);
                         snackbar1.show();
                     }
                 });
+
                 snackbar.show();
 
 

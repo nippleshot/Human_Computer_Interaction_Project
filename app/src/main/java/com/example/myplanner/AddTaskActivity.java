@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -52,28 +53,7 @@ public class AddTaskActivity extends AppCompatActivity {
         taskMemo_inputLayout = findViewById(R.id.text_input_taskMemo);
 
         dataBase = DataBase.getDataBase(this);
-
         button = findViewById(R.id.addNewTask);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Task newTask = new Task(
-                        taskName_inputLayout.getEditText().getText().toString(),
-                        taskStartDate_inputLayout.getEditText().getText().toString(),
-                        taskStartTime_inputLayout.getEditText().getText().toString(),
-                        taskCompleteDate_inputLayout.getEditText().getText().toString(),
-                        taskCompleteTime_inputLayout.getEditText().getText().toString(),
-                        taskPlace_inputLayout.getEditText().getText().toString(),
-                        taskMemo_inputLayout.getText().toString()
-                );
-
-                dataBase.createTask( newTask );
-
-                closeKeyboard();
-            }
-        });
 
         backButton = findViewById(R.id.bottomAppBar);
         backButton.setNavigationOnClickListener(new View.OnClickListener() {
@@ -215,6 +195,70 @@ public class AddTaskActivity extends AppCompatActivity {
             }
         });
 
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(taskName_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartTime_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteTime_inputLayout.getEditText().getText().toString().equals("") ) {
+
+                    if(taskName_inputLayout.getEditText().getText().toString().equals("")){
+                        taskName_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartTime_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteTime_inputLayout.setError("这里不能为空");
+                    }
+
+                }else{
+                    Task newTask = new Task(
+                            taskName_inputLayout.getEditText().getText().toString(),
+                            taskStartDate_inputLayout.getEditText().getText().toString(),
+                            taskStartTime_inputLayout.getEditText().getText().toString(),
+                            taskCompleteDate_inputLayout.getEditText().getText().toString(),
+                            taskCompleteTime_inputLayout.getEditText().getText().toString(),
+                            taskPlace_inputLayout.getEditText().getText().toString(),
+                            taskMemo_inputLayout.getText().toString()
+                    );
+
+                    if(taskPlace_inputLayout.getEditText().getText().toString().equals("") ){
+                        newTask.setTaskPlace("无");
+                    }
+
+                    if( taskMemo_inputLayout.getText().toString().equals("") ){
+                        newTask.setTaskMemo("无");
+                    }
+
+
+                    dataBase.createTask( newTask );
+
+                    closeKeyboard();
+
+                    openOneDayTaskActivity( newTask.getTaskStartDate() );
+                    finish();
+
+                }
+            }
+        });
+
+    }
+
+    public void openOneDayTaskActivity(String date){
+        Intent intent = new Intent(this, OneDayTaskActivity.class);
+        intent.putExtra("day_Date", date);
+        startActivity(intent);
     }
 
     private void closeKeyboard(){

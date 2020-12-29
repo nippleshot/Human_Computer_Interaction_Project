@@ -210,7 +210,12 @@ public class DataBase {
         ArrayList<String> res = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                res.add(cursor.getString(cursor.getColumnIndex("task_start_date")));
+                String date = cursor.getString(cursor.getColumnIndex("task_start_date"));
+                if(res.contains(date)){
+                    continue;
+                }else{
+                    res.add(cursor.getString(cursor.getColumnIndex("task_start_date")));
+                }
             }while(cursor.moveToNext());
         }
         return sortDateArrayList(res);

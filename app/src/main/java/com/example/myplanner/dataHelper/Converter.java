@@ -20,6 +20,10 @@ public class Converter {
         return new CardViewData(day_Date, day_TotalTaskNum, day_EfficiencyMin, day_UncompletedTaskNum);
     }
 
+    public static CompletedRecycleViewData toCompletedRecycleViewData(Task task){
+        return new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task));
+    }
+
     public static ArrayList<CompletedRecycleViewData> toCompletedRecycleViewDataList(ArrayList<Task> day_Date_CompletedTasks){
         ArrayList<CompletedRecycleViewData> result = new ArrayList<>();
 
@@ -53,7 +57,8 @@ public class Converter {
                                         task.getTaskName(),
                                         MessageHelper.makeUncompletedTaskMsg(task),
                                         task.getTaskPlace(),
-                                        task.getTaskMemo()
+                                        task.getTaskMemo(),
+                                        task.getTaskStartTime() + " - " + task.getTaskCompleteTime()
                                         );
     };
 
