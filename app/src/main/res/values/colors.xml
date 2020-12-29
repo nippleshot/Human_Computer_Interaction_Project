@@ -8,12 +8,14 @@
     <color name="black">#FF000000</color>
 
     <color name="colorWhite">#FFFFFFFF</color>
-    <color name="colorPrimary">#4A6572</color>
     <color name="colorPrimaryLightDark">#344955</color>
     <color name="colorPrimaryDark">#232F34</color>
+
+
     <color name="colorAccent">#F9AA33</color>
     <color name="colorAccentRed">#CD5C5C</color>
     <color name="colorAccentVelvet">#724A65</color>
+    <color name="colorPrimary">#4A6572</color>
 
 
 </resources>
