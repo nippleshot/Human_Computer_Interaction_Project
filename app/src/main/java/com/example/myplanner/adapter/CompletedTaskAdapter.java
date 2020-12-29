@@ -4,13 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myplanner.R;
 import com.example.myplanner.dataHolder.CompletedRecycleViewData;
+import com.example.myplanner.dataHolder.RecycleViewData;
+import com.example.myplanner.dataHolder.UncompletedTasksData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +23,25 @@ public class CompletedTaskAdapter extends RecyclerView.Adapter<CompletedTaskAdap
 
     private ArrayList<CompletedRecycleViewData> completedTasks;
     Context context;
+//    private OnCompleteItemClickListener mListener;
 
     public CompletedTaskAdapter(ArrayList<CompletedRecycleViewData> completedTasks, Context context) {
         this.completedTasks = completedTasks;
         this.context = context;
     }
+
+//    public interface OnCompleteItemClickListener {
+//
+//        void onCancelClick(int task_db_Id);
+//
+//    }
+//
+//    public void setOnCompleteItemClickListener(OnCompleteItemClickListener listener) {
+//        mListener = listener;
+//    }
+
+    
+
 
     @NonNull
     @Override
@@ -55,6 +73,7 @@ public class CompletedTaskAdapter extends RecyclerView.Adapter<CompletedTaskAdap
 
     public class CompletedViewHolder extends RecyclerView.ViewHolder{
         TextView completedTaskTitle, completedTaskTime, completedTaskEfficiency;
+//        ImageView task_not_complete_icon;
 
 
 
@@ -64,6 +83,23 @@ public class CompletedTaskAdapter extends RecyclerView.Adapter<CompletedTaskAdap
             completedTaskTitle = itemView.findViewById(R.id.completedTaskTitle);
             completedTaskTime = itemView.findViewById(R.id.completedTaskTime);
             completedTaskEfficiency = itemView.findViewById(R.id.completedTaskEfficiency);
+//            task_not_complete_icon = itemView.findViewById(R.id.task_not_complete_icon);
+//            task_not_complete_icon.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View view) {
+//                    if (listener != null) {
+//                        int position = getAdapterPosition();
+//                        if (position != RecyclerView.NO_POSITION) {
+//
+//                            CompletedRecycleViewData completedRecycleViewData = completedTasks.get(position);
+//
+//                            listener.onCancelClick(completedRecycleViewData.getTask_db_Id());
+//
+//                        }
+//                    }
+//                }
+//            });
 
         }
     }

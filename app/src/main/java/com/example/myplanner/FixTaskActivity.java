@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.myplanner.dataHelper.TaskHelper;
 import com.example.myplanner.database.DataBase;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
@@ -79,7 +80,8 @@ public class FixTaskActivity extends AppCompatActivity {
         backButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                openOneDayTaskActivity(to_FixTask.getTaskStartDate());
+                finish();
             }
         });
 
@@ -204,34 +206,75 @@ public class FixTaskActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task updateTask = new Task(
-                        to_FixTask.getTaskId(),
-                        taskName_inputLayout.getEditText().getText().toString(),
-                        taskStartDate_inputLayout.getEditText().getText().toString(),
-                        taskStartTime_inputLayout.getEditText().getText().toString(),
-                        taskCompleteDate_inputLayout.getEditText().getText().toString(),
-                        taskCompleteTime_inputLayout.getEditText().getText().toString(),
-                        to_FixTask.getTaskRealCompleteDate(),
-                        to_FixTask.getTaskRealCompleteTime(),
-                        taskPlace_inputLayout.getEditText().getText().toString(),
-                        taskMemo_inputLayout.getText().toString(),
-                        to_FixTask.isCompleted(),
-                        to_FixTask.isCompletedInTime()
-                );
 
-                dataBase.updateTask( updateTask );
+                if(taskName_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartTime_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteTime_inputLayout.getEditText().getText().toString().equals("") ) {
 
-                // 만약 같은 날짜 시간의 task있다면 알림창 띠우기?
+                    if(taskName_inputLayout.getEditText().getText().toString().equals("")){
+                        taskName_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartTime_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteTime_inputLayout.setError("这里不能为空");
+                    }
+
+                }else if( TaskHelper.subtractDateTime(
+                        taskCompleteDate_inputLayout.getEditText().getText().toString()+taskCompleteTime_inputLayout.getEditText().getText(),
+                        taskStartDate_inputLayout.getEditText().getText().toString()+taskStartTime_inputLayout.getEditText().getText().toString()) <= 0){
+
+                    if(taskCompleteDate_inputLayout.getEditText().getText().toString().equals( taskStartDate_inputLayout.getEditText().getText().toString() )){
+                        taskCompleteTime_inputLayout.setError("比开始时间更早");
+                    }else{
+                        taskCompleteDate_inputLayout.setError("比开始日期更早");
+                        taskCompleteTime_inputLayout.setError("比开始时间更早");
+                    }
 
 
-                closeKeyboard();
+                } else{
+                    Task updateTask = new Task(
+                            to_FixTask.getTaskId(),
+                            taskName_inputLayout.getEditText().getText().toString(),
+                            taskStartDate_inputLayout.getEditText().getText().toString(),
+                            taskStartTime_inputLayout.getEditText().getText().toString(),
+                            taskCompleteDate_inputLayout.getEditText().getText().toString(),
+                            taskCompleteTime_inputLayout.getEditText().getText().toString(),
+                            to_FixTask.getTaskRealCompleteDate(),
+                            to_FixTask.getTaskRealCompleteTime(),
+                            taskPlace_inputLayout.getEditText().getText().toString(),
+                            taskMemo_inputLayout.getText().toString(),
+                            to_FixTask.isCompleted(),
+                            to_FixTask.isCompletedInTime()
+                    );
 
-                openOneDayTaskActivity( updateTask.getTaskStartDate() );
+                    dataBase.updateTask( updateTask );
 
-                finish();
+                    closeKeyboard();
+
+                    openOneDayTaskActivity( updateTask.getTaskStartDate() );
+
+                    finish();
+
+                }
+
             }
         });
 
+    }
+
+    public void openMainStaggeredActivity(){
+        Intent intent = new Intent(this, MainStaggeredActivity.class);
+        startActivity(intent);
     }
 
     public void openOneDayTaskActivity(String date){

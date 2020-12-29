@@ -46,7 +46,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fix_text_input_taskStartDate"
-                    android:layout_width="150dp"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fix_text_input_taskName"
                     android:layout_marginTop="15dp"
@@ -66,7 +66,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fix_text_input_taskStartTime"
-                    android:layout_width="150dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fix_text_input_taskName"
                     android:layout_marginLeft="10dp"
@@ -89,7 +89,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fix_text_input_taskCompleteDate"
-                    android:layout_width="150dp"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fix_text_input_taskStartDate"
                     android:layout_marginTop="10dp"
@@ -109,7 +109,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/fix_text_input_taskCompleteTime"
-                    android:layout_width="150dp"
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fix_text_input_taskStartTime"
                     android:layout_marginLeft="10dp"

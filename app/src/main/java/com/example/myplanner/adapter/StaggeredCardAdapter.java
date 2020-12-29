@@ -1,5 +1,6 @@
 package com.example.myplanner.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -115,7 +116,7 @@ public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdap
 //                    Log.i("MainActivity", "MainRecycleView List<CardViewData> dayTask.size() ===> " + dayTask.size());
 
                     openDayTaskActivity(getAdapterPosition());
-
+                    ((Activity)context).finish();
                 }
             });
 

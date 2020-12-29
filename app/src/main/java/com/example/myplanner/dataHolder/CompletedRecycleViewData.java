@@ -8,12 +8,14 @@ public class CompletedRecycleViewData {
     private String task_Start_Completed;
     private String task_TimeGap_Msg;
     private int timeGap;
+    private int task_db_Id;
 
-    public CompletedRecycleViewData(String task_Name, String task_StartTime, String task_RealCompletedTime, int timeGap) {
+    public CompletedRecycleViewData(String task_Name, String task_StartTime, String task_RealCompletedTime, int timeGap, int task_db_Id) {
         this.task_Name = task_Name;
         this.task_Start_Completed = task_StartTime + " - " + task_RealCompletedTime;
         this.task_TimeGap_Msg = MessageHelper.makeCompletedTaskMsg(timeGap);
         this.timeGap = timeGap;
+        this.task_db_Id = task_db_Id;
     }
 
 
@@ -48,5 +50,13 @@ public class CompletedRecycleViewData {
 
     public void setTimeGap(int timeGap) {
         this.timeGap = timeGap;
+    }
+
+    public int getTask_db_Id() {
+        return task_db_Id;
+    }
+
+    public void setTask_db_Id(int task_db_Id) {
+        this.task_db_Id = task_db_Id;
     }
 }

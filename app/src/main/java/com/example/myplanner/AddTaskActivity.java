@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.myplanner.dataHelper.TaskHelper;
 import com.example.myplanner.database.DataBase;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
@@ -59,7 +60,8 @@ public class AddTaskActivity extends AppCompatActivity {
         backButton.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                openMainStaggeredActivity();
+                finish();
             }
         });
 
@@ -222,7 +224,19 @@ public class AddTaskActivity extends AppCompatActivity {
                         taskCompleteTime_inputLayout.setError("这里不能为空");
                     }
 
-                }else{
+                }else if( TaskHelper.subtractDateTime(
+                        taskCompleteDate_inputLayout.getEditText().getText().toString()+taskCompleteTime_inputLayout.getEditText().getText(),
+                        taskStartDate_inputLayout.getEditText().getText().toString()+taskStartTime_inputLayout.getEditText().getText().toString()) <= 0){
+
+                    if(taskCompleteDate_inputLayout.getEditText().getText().toString().equals( taskStartDate_inputLayout.getEditText().getText().toString() )){
+                        taskCompleteTime_inputLayout.setError("比开始时间更早");
+                    }else{
+                        taskCompleteDate_inputLayout.setError("比开始日期更早");
+                        taskCompleteTime_inputLayout.setError("比开始时间更早");
+                    }
+
+
+                } else{
                     Task newTask = new Task(
                             taskName_inputLayout.getEditText().getText().toString(),
                             taskStartDate_inputLayout.getEditText().getText().toString(),
@@ -258,6 +272,11 @@ public class AddTaskActivity extends AppCompatActivity {
     public void openOneDayTaskActivity(String date){
         Intent intent = new Intent(this, OneDayTaskActivity.class);
         intent.putExtra("day_Date", date);
+        startActivity(intent);
+    }
+
+    public void openMainStaggeredActivity(){
+        Intent intent = new Intent(this, MainStaggeredActivity.class);
         startActivity(intent);
     }
 

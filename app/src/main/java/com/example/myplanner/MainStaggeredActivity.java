@@ -56,6 +56,7 @@ public class MainStaggeredActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openAddTaskActivity();
+                finish();
             }
         });
 

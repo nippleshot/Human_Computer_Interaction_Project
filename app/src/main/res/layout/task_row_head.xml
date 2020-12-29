@@ -102,10 +102,10 @@
                 android:text="+ 39分钟"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_below="@+id/taskNotCompletedNum"
-                android:layout_marginTop="22dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/efficiencyLabel"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="28dp"
+                android:layout_below="@+id/efficiencyLabel"
+
                 />
 
 

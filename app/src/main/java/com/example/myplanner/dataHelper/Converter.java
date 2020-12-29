@@ -21,7 +21,7 @@ public class Converter {
     }
 
     public static CompletedRecycleViewData toCompletedRecycleViewData(Task task){
-        return new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task));
+        return new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task), task.getTaskId());
     }
 
     public static ArrayList<CompletedRecycleViewData> toCompletedRecycleViewDataList(ArrayList<Task> day_Date_CompletedTasks){
@@ -30,7 +30,7 @@ public class Converter {
         Task task;
         for(int i=0; i<day_Date_CompletedTasks.size(); i++){
             task = day_Date_CompletedTasks.get(i);
-            result.add( new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task)) );
+            result.add( new CompletedRecycleViewData(task.getTaskName(), task.getTaskStartTime(), task.getTaskRealCompleteTime(), TaskHelper.countGapInMin(task), task.getTaskId()) );
         }
 
         return result;
@@ -61,6 +61,11 @@ public class Converter {
                                         task.getTaskStartTime() + " - " + task.getTaskCompleteTime()
                                         );
     };
+
+    public static RecycleViewData toRecycleViewData(Task task){
+
+        return new RecycleViewData(null, toUncompletedTasksData(task), 2);
+    }
 
 
     public static ArrayList<RecycleViewData> toRecycleViewDataList(ArrayList<Task> day_Date_AllTasks){

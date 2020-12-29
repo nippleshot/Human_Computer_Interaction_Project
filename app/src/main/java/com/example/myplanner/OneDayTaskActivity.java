@@ -8,7 +8,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myplanner.adapter.CompletedTaskAdapter;
 import com.example.myplanner.adapter.TaskListAdapter;
+import com.example.myplanner.dataHelper.Converter;
 import com.example.myplanner.dataHelper.TaskHelper;
 import com.example.myplanner.dataHolder.RecycleViewData;
 import com.example.myplanner.database.DataBase;
@@ -82,6 +84,7 @@ public class OneDayTaskActivity extends AppCompatActivity {
 
     private void setRecycleView() {
         taskListAdapter = new TaskListAdapter(day_Tasks, this);
+
         recyclerView.setAdapter(taskListAdapter);
         recyclerView.setHasFixedSize(true);
 
@@ -189,6 +192,28 @@ public class OneDayTaskActivity extends AppCompatActivity {
 
             }
         });
+
+//        taskListAdapter.completedTaskAdapter.setOnCompleteItemClickListener(new CompletedTaskAdapter.OnCompleteItemClickListener() {
+//            @Override
+//            public void onCancelClick(int task_db_Id) {
+//                Task tempTask = dataBase.getTaskById(task_db_Id);
+//                int tempTaskEfficiency = TaskHelper.countGapInMin(tempTask);
+//
+//                tempTask.setTaskRealCompleteDate(null);
+//                tempTask.setTaskRealCompleteTime(null);
+//                tempTask.setCompleted( false );
+//                tempTask.setCompletedInTime( false );
+//
+//                dataBase.updateTask(tempTask);
+//
+//                taskListAdapter.dataItems.add( Converter.toRecycleViewData(tempTask) );
+//                taskListAdapter.notifyDataSetChanged();
+//                taskListAdapter.dataItems.get(0).getAnalysisViewData().downdate(tempTask, tempTaskEfficiency);
+//                taskListAdapter.notifyItemChanged(0);
+//                taskListAdapter.completedTaskAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
     }
 
 

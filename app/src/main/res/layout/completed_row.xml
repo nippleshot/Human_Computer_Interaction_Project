@@ -16,7 +16,8 @@
             android:layout_centerVertical="true"
             android:text="Completed Task Name"
             android:textSize="14sp"
-            android:maxLength="15" />
+            android:textColor="@color/black"
+            android:maxLength="10" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="130dp"
-            android:text="- 00:08"
+            android:text="迟到11个小时56分钟"
             android:textColor="@color/colorAccentVelvet"
             android:textAlignment="center"
             android:textSize="14sp" />
@@ -34,11 +35,12 @@
             android:id="@+id/completedTaskTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="08:20 - 09:13"
-            android:layout_marginRight="5dp"
-            android:textSize="14sp" />
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_alignParentRight="true"
+            />
 
 
     </RelativeLayout>
