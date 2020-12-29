@@ -241,7 +241,7 @@ public class DataBase {
                                 Integer.parseInt(dateList.get(j).substring(8))){
                             String s = dateList.get(i);
                             dateList.remove(i);
-                            dateList.add(i, dateList.get(j));
+                            dateList.add(i, dateList.get(j - 1));
                             dateList.remove(j);
                             dateList.add(j, s);
                         }
@@ -249,7 +249,7 @@ public class DataBase {
                             Integer.parseInt(dateList.get(j).substring(5, 7))){
                         String s = dateList.get(i);
                         dateList.remove(i);
-                        dateList.add(i, dateList.get(j));
+                        dateList.add(i, dateList.get(j - 1));
                         dateList.remove(j);
                         dateList.add(j, s);
                     }
@@ -257,7 +257,7 @@ public class DataBase {
                         Integer.parseInt(dateList.get(j).substring(0, 4))){
                     String s = dateList.get(i);
                     dateList.remove(i);
-                    dateList.add(i, dateList.get(j));
+                    dateList.add(i, dateList.get(j - 1));
                     dateList.remove(j);
                     dateList.add(j, s);
                 }
@@ -274,7 +274,7 @@ public class DataBase {
                 res.add(getTaskByCursor(cursor));
             }while(cursor.moveToNext());
         }
-        return res;
+        return sortArrayList(res);
     }
 
     /**
@@ -290,7 +290,7 @@ public class DataBase {
                             Integer.parseInt(taskList.get(j).getTaskStartTime().substring(3))){
                         Task task = taskList.get(i);
                         taskList.remove(i);
-                        taskList.add(i, taskList.get(j));
+                        taskList.add(i, taskList.get(j - 1));
                         taskList.remove(j);
                         taskList.add(j, task);
                     }
@@ -298,7 +298,7 @@ public class DataBase {
                         Integer.parseInt(taskList.get(j).getTaskStartTime().substring(0, 2))){
                     Task task = taskList.get(i);
                     taskList.remove(i);
-                    taskList.add(i, taskList.get(j));
+                    taskList.add(i, taskList.get(j - 1));
                     taskList.remove(j);
                     taskList.add(j, task);
                 }
