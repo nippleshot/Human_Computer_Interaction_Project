@@ -3,6 +3,7 @@ package com.example.myplanner.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.example.myplanner.dataHelper.MessageHelper;
 import com.example.myplanner.dataHolder.CompletedTasksData;
 import com.example.myplanner.dataHolder.RecycleViewData;
 import com.example.myplanner.dataHolder.UncompletedTasksData;
+import com.example.myplanner.database.DataBase;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -31,6 +33,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,20 +44,21 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TASK_VIEW_HOLDER = 2;
 
     private RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-    private ArrayList<RecycleViewData> dataItems;
+    public ArrayList<RecycleViewData> dataItems;
     private Context context;
     private OnItemClickListener mListener;
     public CompletedTaskAdapter completedTaskAdapter;
 
     public TaskListAdapter(ArrayList<Task> tasks, Context context) {
+
         this.dataItems = Converter.toRecycleViewDataList( tasks );
         this.context = context;
     }
 
     public interface OnItemClickListener {
-        void onDeleteClick(int task_db_Id);
+        void onDeleteClick(int task_db_Id, RecycleViewData recycleViewData, int position);
 
-        void onInsertClick(int task_db_Id);
+        void onInsertClick(int task_db_Id, RecycleViewData recycleViewData, int position);
 
     }
 
@@ -85,6 +89,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ((TaskViewHolder) holder).taskTitle.setText(task.getTask_Name());
             ((TaskViewHolder) holder).taskTimeLeft.setText(task.getTask_TimeMsg());
+            ((TaskViewHolder) holder).taskTime.setText(task.getTask_TimePlanned());
             ((TaskViewHolder) holder).taskPlace.setText(task.getTask_Place());
             ((TaskViewHolder) holder).taskMemo.setText(task.getTask_Memo());
 
@@ -166,15 +171,32 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
 
-        yValues.add(new PieEntry(completedInTime, "时间内完成"));
-        yValues.add(new PieEntry(completedOverTime, "过时完成"));
+        if( (completedOverTime==0) && (completedInTime!=0) ){
+            yValues.add(new PieEntry(completedInTime, "时间内完成"));
+        }else if( (completedInTime==0) && (completedOverTime!=0) ){
+            yValues.add(new PieEntry(completedOverTime, "过时完成"));
+        }else{
+            yValues.add(new PieEntry(completedInTime, "时间内完成"));
+            yValues.add(new PieEntry(completedOverTime, "过时完成"));
+        }
+
+
 
         pieChart.animateY(1000, Easing.EaseInOutCubic);
 
         PieDataSet dataSet = new PieDataSet(yValues, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-        dataSet.setColors(context.getResources().getColor(R.color.colorAccent), context.getResources().getColor(R.color.colorPrimary));
+
+
+        if( (completedOverTime==0) && (completedInTime!=0) ){
+            dataSet.setColors(context.getResources().getColor(R.color.colorAccent));
+        }else if( (completedInTime==0) && (completedOverTime!=0) ){
+            dataSet.setColors(context.getResources().getColor(R.color.colorPrimary));
+        }else{
+            dataSet.setColors(context.getResources().getColor(R.color.colorAccent), context.getResources().getColor(R.color.colorPrimary));
+        }
+
 
         PieData data = new PieData(dataSet);
         data.setValueTextSize(20f);
@@ -225,7 +247,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class TaskViewHolder extends RecyclerView.ViewHolder{
-        TextView taskTitle, taskTimeLeft, taskPlace, taskMemo;
+        TextView taskTitle, taskTimeLeft, taskTime, taskPlace, taskMemo;
         LinearLayout linearLayout;
         RelativeLayout expandableLayout;
         MaterialButton fixButton;
@@ -239,6 +261,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             taskTitle = itemView.findViewById(R.id.taskTitle);
             taskTimeLeft = itemView.findViewById(R.id.taskTimeLeft);
+            taskTime = itemView.findViewById(R.id.taskTime);
             taskPlace = itemView.findViewById(R.id.taskPlace);
             taskMemo = itemView.findViewById(R.id.taskMemo);
             linearLayout = itemView.findViewById(R.id.linear_layout);
@@ -263,6 +286,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     int position = getAdapterPosition();
                     RecycleViewData recycleViewData = dataItems.get(position);
                     UncompletedTasksData to_FixTask = recycleViewData.getCheckListViewData();
+                    //Log.i("TaskListAdapter", "Clicked task db id ==> " + to_FixTask.getTask_db_index());
                     openFixTaskActivity( to_FixTask.getTask_db_index() );
                 }
             });
@@ -272,11 +296,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     if (listener != null) {
                         int position = getAdapterPosition();
+
+                        //Log.i("TaskListAdapter", "Clicked taskDelete_icon and position is  ==> " + position);
                         if (position != RecyclerView.NO_POSITION) {
 
                             RecycleViewData recycleViewData = dataItems.get(position);
                             UncompletedTasksData to_RemoveTask = recycleViewData.getCheckListViewData();
-                            listener.onDeleteClick(to_RemoveTask.getTask_db_index());
+                            listener.onDeleteClick(to_RemoveTask.getTask_db_index(), recycleViewData, position);
 
                         }
                     }
@@ -292,7 +318,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                             RecycleViewData recycleViewData = dataItems.get(position);
                             UncompletedTasksData to_CompleteTask = recycleViewData.getCheckListViewData();
-                            listener.onInsertClick(to_CompleteTask.getTask_db_index());
+                            // 먼저 데이터 베이스에다 업뎃을 하고
+                            listener.onInsertClick(to_CompleteTask.getTask_db_index(), recycleViewData, position);
 
                         }
                     }

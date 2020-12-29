@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -41,13 +42,6 @@ public class FixTaskActivity extends AppCompatActivity {
         int task_db_Id = getIntent().getIntExtra("task_db_Id", Integer.MAX_VALUE);
         Task to_FixTask = dataBase.getTaskById(task_db_Id);
 
-        //Date == yyyy[0] MM[1] dd[2]
-        //Time ==   HH[0] mm[1]
-        String[] origin_StartDate = to_FixTask.getTaskStartDate().split("/");
-        String[] origin_StartTime = to_FixTask.getTaskStartTime().split(":");
-        String[] origin_CompleteDate = to_FixTask.getTaskCompleteDate().split("/");
-        String[] origin_CompleteTime = to_FixTask.getTaskCompleteTime().split(":");
-
 
         taskName_inputLayout = findViewById(R.id.fix_text_input_taskName);
         taskStartDate_inputLayout = findViewById(R.id.fix_text_input_taskStartDate);
@@ -57,10 +51,28 @@ public class FixTaskActivity extends AppCompatActivity {
         taskPlace_inputLayout = findViewById(R.id.fix_text_input_taskPlace);
         taskMemo_inputLayout = findViewById(R.id.fix_text_input_taskMemo);
 
+        EditText startDate = taskStartDate_inputLayout.getEditText();
+        EditText startTime = taskStartTime_inputLayout.getEditText();
+        EditText completeDate = taskCompleteDate_inputLayout.getEditText();
+        EditText completeTime = taskCompleteTime_inputLayout.getEditText();
+
 
         taskName_inputLayout.getEditText().setText(to_FixTask.getTaskName());
         taskPlace_inputLayout.getEditText().setText(to_FixTask.getTaskPlace());
         taskMemo_inputLayout.setText(to_FixTask.getTaskMemo());
+        startDate.setText(to_FixTask.getTaskStartDate());
+        startTime.setText(to_FixTask.getTaskStartTime());
+        completeDate.setText(to_FixTask.getTaskCompleteDate());
+        completeTime.setText(to_FixTask.getTaskCompleteTime());
+
+        //Date == yyyy[0] MM[1] dd[2]
+        //Time ==   HH[0] mm[1]
+        String[] origin_StartDate = to_FixTask.getTaskStartDate().split("/");
+        String[] origin_StartTime = to_FixTask.getTaskStartTime().split(":");
+        String[] origin_CompleteDate = to_FixTask.getTaskCompleteDate().split("/");
+        String[] origin_CompleteTime = to_FixTask.getTaskCompleteTime().split(":");
+
+        //Log.i("FixTaskActivity", "StartDate ==> " + origin_StartDate[0] + origin_StartDate[1] + origin_StartDate[2] );
 
 
         backButton = findViewById(R.id.bottomAppBar);
@@ -74,10 +86,7 @@ public class FixTaskActivity extends AppCompatActivity {
         button = findViewById(R.id.updateNewTask);
 
 
-        EditText startDate = taskStartDate_inputLayout.getEditText();
-        EditText startTime = taskStartTime_inputLayout.getEditText();
-        EditText completeDate = taskCompleteDate_inputLayout.getEditText();
-        EditText completeTime = taskCompleteTime_inputLayout.getEditText();
+
 
 
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +110,7 @@ public class FixTaskActivity extends AppCompatActivity {
                         String date = year+"/"+printMonth+"/"+printDay;
                         startDate.setText(date);
                     }
-                }, Integer.parseInt(origin_StartDate[0]), Integer.parseInt(origin_StartDate[1]), Integer.parseInt(origin_StartDate[2]));
+                }, Integer.parseInt(origin_StartDate[0]), Integer.parseInt(origin_StartDate[1])-1, Integer.parseInt(origin_StartDate[2]));
                 s_datePickerDialog.show();
             }
         });
@@ -157,7 +166,7 @@ public class FixTaskActivity extends AppCompatActivity {
                         String date = year+"/"+printMonth+"/"+printDay;
                         completeDate.setText(date);
                     }
-                }, Integer.parseInt(origin_CompleteDate[0]), Integer.parseInt(origin_CompleteDate[1]), Integer.parseInt(origin_CompleteDate[2]));
+                }, Integer.parseInt(origin_CompleteDate[0]), Integer.parseInt(origin_CompleteDate[1])-1, Integer.parseInt(origin_CompleteDate[2]));
 
                 c_datePickerDialog.show();
             }
@@ -217,7 +226,9 @@ public class FixTaskActivity extends AppCompatActivity {
 
                 closeKeyboard();
 
-                openOneDayTaskActivity( to_FixTask.getTaskStartDate() );
+                openOneDayTaskActivity( updateTask.getTaskStartDate() );
+
+                finish();
             }
         });
 

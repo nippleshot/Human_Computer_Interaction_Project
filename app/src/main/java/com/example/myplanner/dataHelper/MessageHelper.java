@@ -87,7 +87,7 @@ public class MessageHelper {
      */
     public static String makeUncompletedTaskMsg(Task task){
         if(!task.isCompleted()){
-            String taskStartDateTime = task.getTaskStartDate() + task.getTaskCompleteTime();
+            String taskStartDateTime = task.getTaskStartDate() + task.getTaskStartTime();
             return makeUncompletedTaskMsg(taskStartDateTime);
         }else{
             return "MessageHelper.makeUncompletedTaskMsg() Error : this task is completed task";

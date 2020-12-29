@@ -200,23 +200,56 @@ public class AddTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Task newTask = new Task(
-                        taskName_inputLayout.getEditText().getText().toString(),
-                        taskStartDate_inputLayout.getEditText().getText().toString(),
-                        taskStartTime_inputLayout.getEditText().getText().toString(),
-                        taskCompleteDate_inputLayout.getEditText().getText().toString(),
-                        taskCompleteTime_inputLayout.getEditText().getText().toString(),
-                        taskPlace_inputLayout.getEditText().getText().toString(),
-                        taskMemo_inputLayout.getText().toString()
-                );
+                if(taskName_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskStartTime_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")
+                        || taskCompleteTime_inputLayout.getEditText().getText().toString().equals("") ) {
 
-                dataBase.createTask( newTask );
+                    if(taskName_inputLayout.getEditText().getText().toString().equals("")){
+                        taskName_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskStartTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskStartTime_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteDate_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteDate_inputLayout.setError("这里不能为空");
+                    }
+                    if(taskCompleteTime_inputLayout.getEditText().getText().toString().equals("")){
+                        taskCompleteTime_inputLayout.setError("这里不能为空");
+                    }
 
-                closeKeyboard();
+                }else{
+                    Task newTask = new Task(
+                            taskName_inputLayout.getEditText().getText().toString(),
+                            taskStartDate_inputLayout.getEditText().getText().toString(),
+                            taskStartTime_inputLayout.getEditText().getText().toString(),
+                            taskCompleteDate_inputLayout.getEditText().getText().toString(),
+                            taskCompleteTime_inputLayout.getEditText().getText().toString(),
+                            taskPlace_inputLayout.getEditText().getText().toString(),
+                            taskMemo_inputLayout.getText().toString()
+                    );
 
-                openOneDayTaskActivity( newTask.getTaskStartDate() );
+                    if(taskPlace_inputLayout.getEditText().getText().toString().equals("") ){
+                        newTask.setTaskPlace("无");
+                    }
+
+                    if( taskMemo_inputLayout.getText().toString().equals("") ){
+                        newTask.setTaskMemo("无");
+                    }
 
 
+                    dataBase.createTask( newTask );
+
+                    closeKeyboard();
+
+                    openOneDayTaskActivity( newTask.getTaskStartDate() );
+                    finish();
+
+                }
             }
         });
 

@@ -2,6 +2,7 @@ package com.example.myplanner.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.List;
 public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdapter.DayTaskViewHolder>  {
     List<CardViewData> dayTask;
     Context context;
+    View view;
 
     public StaggeredCardAdapter(List<CardViewData> dayTask, Context context) {
         this.dayTask = dayTask;
@@ -32,7 +34,7 @@ public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdap
     @NonNull
     @Override
     public DayTaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.day_review_card, parent, false);
+        view = LayoutInflater.from(context).inflate(R.layout.day_review_card, parent, false);
         return new DayTaskViewHolder(view);
     }
 
@@ -96,6 +98,7 @@ public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdap
         public DayTaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
+
             cardView = itemView.findViewById(R.id.dayTaskCardView);
             dayTaskDateYear = itemView.findViewById(R.id.dayTaskDateYear);
             dayTaskDateMonth = itemView.findViewById(R.id.dayTaskDateMonth);
@@ -104,11 +107,15 @@ public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdap
             totalDayTaskNotComplete = itemView.findViewById(R.id.totalDayTaskNotComplete);
             dayTaskLinear_layout = itemView.findViewById(R.id.dayTaskOuterLinear_layout);
 
-            int dayTask_index = getAdapterPosition();
-            dayTaskLinear_layout.setOnClickListener(new View.OnClickListener() {
+
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openDayTaskActivity(dayTask_index);
+//                    Log.i("MainActivity", "MainRecycleView Clicked Position ===> " + getAdapterPosition());
+//                    Log.i("MainActivity", "MainRecycleView List<CardViewData> dayTask.size() ===> " + dayTask.size());
+
+                    openDayTaskActivity(getAdapterPosition());
+
                 }
             });
 

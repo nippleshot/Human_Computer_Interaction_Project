@@ -74,10 +74,33 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_baseline_place_24"
-                android:id="@+id/taskPlaceIcon"
+                android:src="@drawable/ic_baseline_access_time_24"
+                android:id="@+id/taskTimeIcon"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taskTime"
+                android:text="08:10 - 09:20"
+                android:textSize="17sp"
+                android:textColor="@color/colorPrimaryLightDark"
+                android:maxLines="1"
+                android:layout_toRightOf="@+id/taskTimeIcon"
+                android:layout_marginLeft="10dp"
+                android:padding="16dp"
+                />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_baseline_place_24"
+                android:id="@+id/taskPlaceIcon"
+                android:layout_below="@id/taskTimeIcon"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
                 />
 
             <TextView
@@ -89,8 +112,9 @@
                 android:textColor="@color/colorPrimaryLightDark"
                 android:maxLines="1"
                 android:layout_toRightOf="@+id/taskPlaceIcon"
+                android:layout_below="@id/taskTimeIcon"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:padding="16dp"
                 />
 
@@ -115,6 +139,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/taskInfoIcon"
                 android:layout_below="@+id/taskPlace"
+                android:layout_marginTop="10dp"
                 android:padding="16dp"
                 />
 

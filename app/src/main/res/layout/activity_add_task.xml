@@ -50,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_input_taskName"
                     android:layout_marginTop="15dp"
+                    app:errorEnabled="true"
                     android:descendantFocusability="blocksDescendants"
                     app:hintAnimationEnabled="true">
 
@@ -73,6 +74,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_toRightOf="@id/text_input_taskStartDate"
                     android:layout_alignParentRight="true"
+                    app:errorEnabled="true"
                     android:descendantFocusability="blocksDescendants"
                     app:hintAnimationEnabled="true">
 
@@ -94,6 +96,7 @@
                     android:layout_below="@+id/text_input_taskStartDate"
                     android:layout_marginTop="10dp"
                     android:descendantFocusability="blocksDescendants"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,6 +119,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/text_input_taskCompleteDate"
                     android:layout_alignParentRight="true"
+                    app:errorEnabled="true"
                     android:descendantFocusability="blocksDescendants"
                     app:hintAnimationEnabled="true">
 
@@ -135,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text_input_taskCompleteDate"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     app:hintAnimationEnabled="true"
                     app:errorEnabled="true">
 

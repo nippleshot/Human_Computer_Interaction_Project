@@ -1,5 +1,7 @@
 package com.example.myplanner.dataHolder;
 
+import com.example.myplanner.Task;
+import com.example.myplanner.dataHelper.Converter;
 import com.example.myplanner.dataHelper.TaskHelper;
 
 import java.util.ArrayList;
@@ -22,6 +24,36 @@ public class CompletedTasksData {
         this.task_UncompletedNum = task_UncompletedNum;
         this.completedRecycleViewDataList = completedRecycleViewDataList;
         this.task_TotalEfficiency = TaskHelper.countEfficiency(completedRecycleViewDataList);
+    }
+
+    public void update_delete(){
+        this.task_Total = this.task_Total - 1;
+        this.task_UncompletedNum = this.task_UncompletedNum - 1;
+    }
+
+    public void update_undelete(){
+        this.task_Total = this.task_Total + 1;
+        this.task_UncompletedNum = this.task_UncompletedNum + 1;
+    }
+
+    public void update(Task task){
+        this.task_CompletedNum = this.task_CompletedNum + 1;
+        this.task_UncompletedNum = this.task_UncompletedNum - 1;
+        if(TaskHelper.isTaskCompletedInTime(task)){
+            this.task_CompletedInTimeNum = this.task_CompletedInTimeNum + 1;
+        }
+        this.task_TotalEfficiency = this.task_TotalEfficiency + TaskHelper.countGapInMin(task);
+        completedRecycleViewDataList.add(Converter.toCompletedRecycleViewData(task));
+    }
+
+    public void downdate(Task task, int efficiency){
+        this.task_CompletedNum = this.task_CompletedNum - 1;
+        this.task_UncompletedNum = this.task_UncompletedNum + 1;
+        if(efficiency > 0){
+            this.task_CompletedInTimeNum = this.task_CompletedInTimeNum - 1;
+        }
+        this.task_TotalEfficiency = this.task_TotalEfficiency - efficiency;
+        completedRecycleViewDataList.remove( completedRecycleViewDataList.size()-1 );
     }
 
     public boolean isExpandable() {

@@ -3,6 +3,7 @@ package com.example.myplanner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import com.example.myplanner.dataHelper.Converter;
 import com.example.myplanner.dataHolder.CardViewData;
 import com.example.myplanner.database.DataBase;
 import com.example.myplanner.decorator.CustomItemDecorator;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -21,9 +23,11 @@ import java.util.List;
 public class MainStaggeredActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    TextView emptyView;
     StaggeredCardAdapter cardAdapter;
     List<CardViewData> dataItems;
     FloatingActionButton floatingActionButton;
+    BottomAppBar backButton;
     DataBase dataBase;
 
 
@@ -34,8 +38,17 @@ public class MainStaggeredActivity extends AppCompatActivity {
 
         dataBase = DataBase.getDataBase(this);
         recyclerView = findViewById(R.id.dayTaskRecyclerView);
+        emptyView = findViewById(R.id.empty_view);
         dataItems = new ArrayList<>();
         initData();
+        if(dataItems.size()==0){
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }else{
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
         setCardAdapter();
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.makeNewTask);
@@ -43,6 +56,14 @@ public class MainStaggeredActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openAddTaskActivity();
+            }
+        });
+
+        backButton = findViewById(R.id.bottomAppBar);
+        backButton.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
@@ -62,16 +83,6 @@ public class MainStaggeredActivity extends AppCompatActivity {
 
 
     public void initData(){
-//        dataItems = new ArrayList<>();
-//
-//        String[] date = {"2020年12月23日", "2020年12月24日" ,"2020年12月25日" ,"2020年12月26日" ,"2020年12月27日" ,"2020年12月28日" ,"2020年12月29日" ,"2020年12月30日" ,"2020年12月31日"};
-//        int[] total = {10, 12, 19, 21, 10, 11, 13, 14, 17};
-//        int[] notCompleted = {0, 10, 0, 10, 0, 0, 10, 0, 0, 1};
-//        int[] efficiency = {-120, -231, 10, 68, 90, -10, -92, 31, 12};
-//
-//        for(int i=0; i<date.length; i++){
-//            dataItems.add(new TempCard(date[i], total[i], efficiency[i], notCompleted[i]));
-//        }
 
         ArrayList<String> allDate = dataBase.getAllDate();
         String day_Date;

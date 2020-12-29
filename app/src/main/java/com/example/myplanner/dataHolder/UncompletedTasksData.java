@@ -6,16 +6,18 @@ public class UncompletedTasksData {
     private int task_db_index;
     private String task_Name;
     private String task_TimeMsg;
+    private String task_TimePlanned;
     private String task_Place;
     private String task_Memo;
 
-    public UncompletedTasksData(int task_db_index, String task_Name, String task_TimeMsg, String task_Place, String task_Memo) {
+    public UncompletedTasksData(int task_db_index, String task_Name, String task_TimeMsg, String task_Place, String task_Memo, String task_TimePlanned) {
         this.expandable = false;
         this.task_db_index = task_db_index;
         this.task_Name = task_Name;
         this.task_TimeMsg = task_TimeMsg;
         this.task_Place = task_Place;
         this.task_Memo = task_Memo;
+        this.task_TimePlanned = task_TimePlanned;
     }
 
     public boolean isExpandable() {
@@ -24,6 +26,14 @@ public class UncompletedTasksData {
 
     public void setExpandable(boolean expandable) {
         this.expandable = expandable;
+    }
+
+    public String getTask_TimePlanned() {
+        return task_TimePlanned;
+    }
+
+    public void setTask_TimePlanned(String task_TimePlanned) {
+        this.task_TimePlanned = task_TimePlanned;
     }
 
     public int getTask_db_index() {

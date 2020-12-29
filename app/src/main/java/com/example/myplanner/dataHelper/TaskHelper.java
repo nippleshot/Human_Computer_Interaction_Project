@@ -10,6 +10,17 @@ import java.util.Date;
 
 public class TaskHelper {
 
+
+    public static boolean isTaskCompletedInTime(Task task){
+        if(task.isCompleted()){
+            if(countGapInMin(task) > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /**
      *
      * @param completeDateTime      input format must be yyyy/MM/ddHH:mm
@@ -39,7 +50,6 @@ public class TaskHelper {
         return 0;
     }
 
-    // sorting startDate&Time 필요?
 
 
     /**
@@ -55,7 +65,7 @@ public class TaskHelper {
             return subtractDateTime(task.getTaskCompleteDate()+task.getTaskCompleteTime(),
                     task.getTaskRealCompleteDate()+task.getTaskRealCompleteTime() );
         }else{
-            return Integer.MAX_VALUE;
+            return 0;
         }
     }
 
@@ -71,9 +81,6 @@ public class TaskHelper {
         int taskGap;
         for(int i=0; i<tasks.size(); i++){
             taskGap = countGapInMin(tasks.get(i));
-            if(taskGap == Integer.MAX_VALUE){
-                return Integer.MAX_VALUE;
-            }
             min_Sum = min_Sum + taskGap;
         }
 
@@ -85,9 +92,6 @@ public class TaskHelper {
         int taskGap;
         for(int i=0; i<tasks.size(); i++){
             taskGap = tasks.get(i).getTimeGap();
-            if(taskGap == Integer.MAX_VALUE){
-                return Integer.MAX_VALUE;
-            }
             min_Sum = min_Sum + taskGap;
         }
 

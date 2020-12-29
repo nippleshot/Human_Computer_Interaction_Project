@@ -128,7 +128,7 @@ public class DataBase {
                 cursor.getString(cursor.getColumnIndex("task_real_complete_date")),
                 cursor.getString(cursor.getColumnIndex("task_real_complete_time")),
                 cursor.getString(cursor.getColumnIndex("task_place")),
-                cursor.getString(cursor.getColumnIndex("task_real_memo")),
+                cursor.getString(cursor.getColumnIndex("task_memo")),
                 (cursor.getInt(cursor.getColumnIndex("is_complete")) == 1),
                 (cursor.getInt(cursor.getColumnIndex("is_complete_in_time")) == 1));
     }
@@ -210,7 +210,12 @@ public class DataBase {
         ArrayList<String> res = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
-                res.add(cursor.getString(cursor.getColumnIndex("task_start_date")));
+                String date = cursor.getString(cursor.getColumnIndex("task_start_date"));
+                if(res.contains(date)){
+                    continue;
+                }else{
+                    res.add(cursor.getString(cursor.getColumnIndex("task_start_date")));
+                }
             }while(cursor.moveToNext());
         }
         return sortDateArrayList(res);
