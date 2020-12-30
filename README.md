@@ -1,18 +1,18 @@
 # 人机交互大作业
 
-【1】 实践项目源码 ： （一位项目功能演示）
+[1] 实践项目源码 ： （一位项目功能演示）
 
 * 体现对目标用户诉求的深入挖掘，且满足课上所讲各项设计原则，没有明显使人感觉不舒服的体验
 
   
-【2】 一个ppt文档 ： 
+[2] ppt文档 ： 
 
 * 简单的项目配置说明 
 
 * 个人分工情况
 
   
-【3】 项目需求视频 ：
+[3] 项目需求视频 ：
 
 - 3-5分钟
 
@@ -63,12 +63,12 @@
 
 - 一致的颜色、布局、字体等
 
-  - 采用Material Design + Tetradic colors <img src="./capture/color.png" alt="color" style="zoom: 60%;" />
+  - 采用Material Design + Tetradic colors 💁🏻  <img src="./capture/color.png" alt="color" style="zoom: 60%;" />
   - 黑色文字在白色或浅灰色背景下，或者棕色文字在白色背景下具有较好的可读性
 
 - 在任何View都有添加任务和返回按钮
 
-    <img src="./capture/appbar.png" alt="appbar" style="zoom:10%;" />
+    <img src="./capture/appbar.png" alt="appbar" width="200"/>
 
   
 
@@ -78,13 +78,13 @@
 
 - 提供每一天的进度量和时间使用效率
 
-  <img src="./capture/add1.png" alt="add1" style="zoom:10%;" />
+  <img src="./capture/add1.png" alt="add1" width="200" />
 
   
 
 - 点击未完成的任务能看到该任务的详细信息
 
-  <img src="./capture/detail.png" alt="detail" style="zoom:10%;" />
+  <img src="./capture/detail.png" alt="detail" width="200" />
 
 
 
@@ -93,7 +93,7 @@
 - 一整天的任务View ： 设计为用户只看黄色就认为是正在做得好，灰蓝色就认为正在做得不太好
 - 按开始日期的任务View ：设计为用户只看灰蓝色就认为哪一天的任务都完成了，紫色就认为那一天还存在未完成的任务
 
-  <img src="./capture/totalTask.png" alt="totalTask" style="zoom:10%;" />
+  <img src="./capture/totalTask.png" alt="totalTask" width="200" />
 
 
 
@@ -101,7 +101,7 @@
 
 - 为了预防错误，检查输入任务内容而给反馈
 
-  <img src="./capture/empty.png" alt="empty" style="zoom:10%;" />  <img src="./capture/timeerror.png" alt="timeerror" style="zoom:10%;" />
+  <img src="./capture/empty.png" alt="empty" width="200" />  <img src="./capture/timeerror.png" alt="timeerror" width="200" />
 
   
 
@@ -109,7 +109,7 @@
 
   
 
-  <img src="./capture/snackbar.png" alt="snackbar" style="zoom:10%;" />
+  <img src="./capture/snackbar.png" alt="snackbar" width="300" />
 
 
 
