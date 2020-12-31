@@ -25,7 +25,7 @@
             android:id="@+id/completedTaskEfficiency"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="110dp"
+            android:layout_marginLeft="120dp"
             android:text="迟到11个小时56分钟"
             android:textColor="@color/colorAccentVelvet"
             android:textAlignment="center"

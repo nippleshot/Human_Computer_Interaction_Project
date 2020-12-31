@@ -5,6 +5,7 @@
 * 体现对目标用户诉求的深入挖掘，且满足课上所讲各项设计原则，没有明显使人感觉不舒服的体验
 
   
+
 [2] ppt文档 ： 
 
 * 简单的项目配置说明 
@@ -12,6 +13,7 @@
 * 个人分工情况
 
   
+
 [3] 项目需求视频 ：
 
 - 3-5分钟
@@ -78,7 +80,7 @@
 
 - 提供每一天的进度量和时间使用效率
 
-  <img src="./capture/add1.png" alt="add1" width="200" />
+  <img src="./capture/add1-1.png" alt="add1" width="200" />
 
   
 
@@ -93,7 +95,7 @@
 - 一整天的任务View ： 设计为用户只看黄色就认为是正在做得好，灰蓝色就认为正在做得不太好
 - 按开始日期的任务View ：设计为用户只看灰蓝色就认为哪一天的任务都完成了，紫色就认为那一天还存在未完成的任务
 
-  <img src="./capture/totalTask.png" alt="totalTask" width="200" />
+  <img src="./capture/totalTask-1.png" alt="totalTask" width="200" />
 
 
 

@@ -62,6 +62,11 @@ public class StaggeredCardAdapter extends RecyclerView.Adapter<StaggeredCardAdap
             holder.totalDayTaskEfficiency.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_trending_up_32_yellow, 0, 0, 0);
         }
 
+        if( MessageHelper.changeToHour_Min(efficiencyMin, false).length() > 4){
+            holder.totalDayTaskEfficiency.setTextSize(13);
+        }
+
+
         int notCompletedTaskNum = tempCard.getDay_UncompletedTaskNum();
         if(notCompletedTaskNum > 0){
             holder.totalDayTaskNotComplete.setText("未完成 " + notCompletedTaskNum);
